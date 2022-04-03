@@ -1,5 +1,5 @@
 # SpaTalk
-### A KG-based cell-cell communication inference tool for spatially resolved transcriptomic data
+### A cell-cell communication inference method for spatially resolved transcriptomic data
 
 [![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) <a href='#devtools'>![installed with devtools](https://img.shields.io/badge/installed%20with-devtools-blue)</a> 
 
