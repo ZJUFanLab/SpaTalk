@@ -39,7 +39,7 @@ dec_celltype(object, sc_data, sc_celltype)
 
 dec_cci(object, celltype_sender, celltype_receiver)
 ```
-
+Please refer to the tutorial [vignette](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html) with demo data processing steps. Detailed functions of SpaTalk see the [wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
