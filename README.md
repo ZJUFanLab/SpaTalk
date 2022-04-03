@@ -21,9 +21,9 @@ or
 install.packages(pkgs = 'SpaTalk-1.0.tar.gz',repos = NULL, type = "source")
 ```
 # Usage
-SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data
+__SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data__
 
-- Cell-type decomposition
+### Cell-type decomposition
 
 
 # About
