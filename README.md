@@ -41,5 +41,12 @@ dec_cci(object, celltype_sender, celltype_receiver)
 ```
 __Please refer to the tutorial [vignette](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html) with demo data processing steps. Detailed functions see the [wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__
 
+# Note
+SpaTalk uses the ligand-receptor interactions (LRIs) from CellTalkDB, pathways from KEGG and Reactome, and transcrptional factors (TFs) from AnimalTFDB33 by default. In the current version:
+
+- __SpaTalk can be applied to either single-cell or spot-based ST data__
+- __SpaTalk can be applied to either single-cell or spot-based ST data__
+
+
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
