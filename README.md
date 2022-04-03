@@ -45,8 +45,8 @@ __Please refer to the tutorial [vignette](https://raw.githack.com/ZJUFanLab/SpaT
 SpaTalk uses the ligand-receptor interactions (LRIs) from [CellTalkDB](http://tcm.zju.edu.cn/celltalkdb/), pathways from [KEGG](https://www.kegg.jp/kegg/pathway.html) and [Reactome](https://reactome.org/), and transcrptional factors (TFs) from [AnimalTFDB](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) by default. In the current version:
 
 - __SpaTalk can be applied to either single-cell or spot-based ST data__
-- __SpaTalk can be applied to either single-cell or spot-based ST data__
-
+- __SpaTalk allows to use custom LRIs,pathways, and TFs database__
+- __SpaTalk can visualize cell-type compositions and cell-cell communications multidimensionally__
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
