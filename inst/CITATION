@@ -18,6 +18,6 @@ citEntry(
              as.person("Xiaohui Fan")
              ),
   year     = "2022",
-  textVersion = paste("Shao et al., Knowledge-graph-based cell-cell communication inference for spatially resolved transcriptomic data with SpaTalk, 2022."
+  textVersion = paste("Shao et al. Knowledge-graph-based cell-cell communication inference for spatially resolved transcriptomic data with SpaTalk. 2022."
   )
 )
