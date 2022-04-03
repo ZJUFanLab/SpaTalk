@@ -27,8 +27,8 @@ SpaTalk method consists of two components, wherein the first is to dissect the c
 # object: SpaTalk object
 # sc_data: A matrix containing counts of scRNA-seq data as the reference
 # sc_celltype:  A character containing the cell types for scRNA-seq data
-dec_celltype(object, sc_data, sc_celltype)
 
+dec_celltype(object, sc_data, sc_celltype)
 ```
 
 
