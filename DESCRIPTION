@@ -1,0 +1,40 @@
+Package: SpaTalk
+Title: Infer Cell-Cell Communication for Spatial Transcriptomics
+Version: 1.0
+Depends: R (>= 4.0.0)
+Authors@R: 
+    person("Xin", "Shao", , "xin_shao@zju.edu.cn", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1928-3878"))
+Description: This package can infer Cell-cell communication for spatial transcriptomics.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    Seurat (>= 3.0.0),
+    methods,
+    reshape2,
+    Matrix,
+    NNLM,
+    stringr,
+    progress,
+    stats,
+    ggplot2,
+    ggExtra,
+    crayon,
+    ggpubr,
+    grDevices,
+    scales,
+    scatterpie,
+    pheatmap,
+    corrplot,
+    circlize,
+    ggalluvial,
+    ggraph,
+    ggrepel,
+    igraph
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

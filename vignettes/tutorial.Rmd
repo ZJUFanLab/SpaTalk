@@ -1,0 +1,61 @@
+---
+title: "tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### [1] Single-cell st data
+e.g., STARmap, MERFISH, SeqFISH
+
+STARmap st data is downloaded as the demo data, which includes 930 single cells.
+```{r load st data, echo=TRUE}
+library(SpaTalk)
+# load starmap data
+load(paste0(system.file(package = 'SpaTalk'), "/extdata/starmap_data.rda"))
+load(paste0(system.file(package = 'SpaTalk'), "/extdata/starmap_meta.rda"))
+```
+
+Before create SpaTalk object, we suggest to revise gene symbols of st_data and sc_data used as the reference. Official gene symbols are download from NCBI (updated in 30th, June, 2021) and stored as a data.frame, namely `gene_info`.
+```{r revise gene symbols, echo=TRUE}
+library(SpaTalk)
+demo_geneinfo()
+# revise gene symbols
+starmap_data <- rev_gene(data = as.matrix(starmap_data), data_type = "count", species = "Mouse", geneinfo = geneinfo)
+```
+
+After revising gene symbols, we create a SpaTalk object with st_data and st_meta.
+```{r create object, echo=TRUE}
+obj <- createSpaTalk(st_data = starmap_data, st_meta = starmap_meta[, -4],
+species = "Mouse", if_st_is_sc = T, spot_max_cell = 1)
+```
+
+Deconvolute the cell type with `dec_celltype`.
+```{r dec sc st_data, echo=TRUE}
+obj <- dec_celltype(object = obj, sc_data = starmap_data, sc_celltype = starmap_meta$celltype)
+obj@meta$rawmeta$celltype <- starmap_meta$celltype
+```
+
+Here, we use the ligand-receptor pairs from CellTalkDB and gene-gene interactions from KEGG and Reactome. In this version, only human and mouse information are included. To use other databases or other species, users can build custom data.frame objects, namely `lrpairs` and `pathways` to infer the CCI. See `demo_lrpairs` and `demo_pathways` as follows:
+```{r demo_lrpairs, echo=TRUE}
+demo_lrpairs()
+```
+
+```{r demo_pathways, echo=TRUE}
+demo_pathways()
+```
+
+Find receptors with downstream expressed target genes and transcriptional factors.
+```{r find_lr_path for sc st_data, echo=TRUE}
+obj <- find_lr_path(object = obj, lrpairs = lrpairs, pathways = pathways)
+```
+
