@@ -22,11 +22,14 @@ install.packages(pkgs = 'SpaTalk-1.0.tar.gz',repos = NULL, type = "source")
 ```
 # Usage
 SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data
-### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
+- ### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
 ```
-dec_celltype(object, sc_data, sc_celltype, min_percent = 0.5,min_nFeatures = 10, if_use_normalize_data = T, if_use_hvg = F, if_use_all_cores = T, iter_num = 1000)
+dec_celltype(object,
+             sc_data,
+             sc_celltype)
 ```
 `object` SpaTalk object
+
 `sc_data` A matrix containing counts of single-cell RNA-seq data as the reference
 
 
