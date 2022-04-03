@@ -10,14 +10,13 @@ Spatially resolved transcriptomics (ST) provides the informative details of gene
 
 # <a name='devtools'>Install</a>
 ```
-# install devtools and install SpaTalk
+# install devtools and install
 install.packages(pkgs = 'devtools')
 devtools::install_github('ZJUFanLab/SpaTalk')
 ```
-
 or
-
 ```
-# download the source package in Release page and install it
+# download the source package in Release page and install
+# ensure the right directory for SpaTalk-1.0.tar.gz
 install.packages(pkgs = 'SpaTalk-1.0.tar.gz',repos = NULL, type = "source")
 ```
