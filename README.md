@@ -39,7 +39,7 @@ dec_cci(object, celltype_sender, celltype_receiver)
 ```
 
 # Note
-[![CellTalkDB v1.0](https://img.shields.io/badge/CellTalkDB-v1.0-blueviolet)](http://tcm.zju.edu.cn/celltalkdb/) [![KEGG pathway](https://img.shields.io/badge/KEGG-pathway-ff69b4)](https://www.kegg.jp/kegg/pathway.html) [![Reactome pathway](https://img.shields.io/badge/Reactome-pathway-brightgreen)](https://reactome.org/) [![AnimalTFDB v3.0](https://img.shields.io/badge/AnimalTFDB-v3.0-yellowgreen)](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) [![tutorial](https://img.shields.io/badge/tutorial-vignette-orange)](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html)
+[![CellTalkDB v1.0](https://img.shields.io/badge/CellTalkDB-v1.0-blueviolet)](http://tcm.zju.edu.cn/celltalkdb/) [![KEGG pathway](https://img.shields.io/badge/KEGG-pathway-ff69b4)](https://www.kegg.jp/kegg/pathway.html) [![Reactome pathway](https://img.shields.io/badge/Reactome-pathway-brightgreen)](https://reactome.org/) [![AnimalTFDB v3.0](https://img.shields.io/badge/AnimalTFDB-v3.0-yellowgreen)](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/)
 
 SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://tcm.zju.edu.cn/celltalkdb/), pathways from [`KEGG`](https://www.kegg.jp/kegg/pathway.html) and [`Reactome`](https://reactome.org/), and transcrptional factors (TFs) from [`AnimalTFDB`](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) by default. In the current version:
 
