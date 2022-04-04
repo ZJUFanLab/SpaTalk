@@ -19,7 +19,7 @@ or
 install.packages(pkgs = 'SpaTalk-1.0.tar.gz',repos = NULL, type = "source")
 ```
 # Usage
-SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data
+SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the [wiki page]()
 - ### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
 ```
 # object: SpaTalk object containg ST data
@@ -49,7 +49,7 @@ SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://
 - LRIs and pathways can be download at[`data/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/data) 
 - Demo data can be download at[`inst/extdata/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/inst/extdata)
 
-__Please refer to the [tutorial vignette](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html) with demo data processing steps. Detailed functions see the [wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__
+__Please refer to the [tutorial vignette](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html) with demo data processing steps. Detailed functions see the [document](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/SpaTalk.pdf)__
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn

@@ -5,7 +5,7 @@ Depends: R (>= 4.0.0)
 Authors@R: 
     person("Xin", "Shao", , "xin_shao@zju.edu.cn", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1928-3878"))
-Description: This package can infer Cell-cell communication for spatial transcriptomics.
+Description: This package can infer cell-cell communication for spatial transcriptomics.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
