@@ -23,10 +23,10 @@ plot_st_pie_generate <- function(st_meta, pie_scale = 1, xy_ratio = 1, color = N
     } else {
         col_manual <- color
     }
-    ggplot2::ggplot() + scatterpie::geom_scatterpie(data = st_meta, ggplot2::aes(x = x,
-        y = y), col = cellname, color = NA, pie_scale = pie_scale) + ggplot2::coord_fixed(ratio = 1) +
-        ggplot2::scale_fill_manual(values = col_manual) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-        ggplot2::labs(x = "scaled_x", y = "scaled_y")
+    ggplot2::ggplot() + scatterpie::geom_scatterpie(data = st_meta, ggplot2::aes(x = x, y = y), col = cellname,
+        color = NA, pie_scale = pie_scale) + ggplot2::coord_fixed(ratio = 1) + ggplot2::scale_fill_manual(values = col_manual) +
+        ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "scaled_x",
+        y = "scaled_y")
 }
 
 #' @title Plot spatial transcriptomics data
@@ -36,7 +36,7 @@ plot_st_pie_generate <- function(st_meta, pie_scale = 1, xy_ratio = 1, color = N
 #' @param pie_scale Scale of each pie to plot. Default is \code{1}.
 #' @param xy_ratio Ratio of y and x coordinates. Default is \code{1}.
 #' @param color Filled of colors for pie plot, length of \code{color} must be equal to the number of unique cell types in \code{sc_celltype}.
-#' @import ggplot2 scatterpie methods
+#' @import ggplot2 scatterpie
 #' @importFrom ggpubr get_palette
 #' @export
 
@@ -59,10 +59,10 @@ plot_st_pie <- function(object, pie_scale = 1, xy_ratio = 1, color = NULL) {
     } else {
         col_manual <- color
     }
-    ggplot2::ggplot() + scatterpie::geom_scatterpie(data = st_meta, ggplot2::aes(x = x,
-        y = y), col = cellname, color = NA, pie_scale = pie_scale) + ggplot2::coord_fixed(ratio = 1) +
-        ggplot2::scale_fill_manual(values = col_manual) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-        ggplot2::labs(x = "scaled_x", y = "scaled_y")
+    ggplot2::ggplot() + scatterpie::geom_scatterpie(data = st_meta, ggplot2::aes(x = x, y = y), col = cellname,
+        color = NA, pie_scale = pie_scale) + ggplot2::coord_fixed(ratio = 1) + ggplot2::scale_fill_manual(values = col_manual) +
+        ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "scaled_x",
+        y = "scaled_y")
 }
 
 #' @title Plot spatial distribution of gene
@@ -79,13 +79,12 @@ plot_st_pie <- function(object, pie_scale = 1, xy_ratio = 1, color = NULL) {
 #' @param if_use_newmeta Whether to use newmeta o plot the spatial distribution of gene after \code{\link{dec_celltype}} for spot-based data. Default is \code{TRUE}.
 #' @param celltype gene in which celltype to plot. Default is \code{NULL}. Set \code{Nif_use_newmeta} TRUE when using this parameter.
 #' @param if_plot_others Whether to plot other cells when to use defined \code{celltype}.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @importFrom stats median
 #' @export
 
-plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid = NULL,
-    color_high = "blue", color_midpoint = NULL, if_use_newmeta = T, celltype = NULL,
-    if_plot_others = T) {
+plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid = NULL, color_high = "blue",
+    color_midpoint = NULL, if_use_newmeta = T, celltype = NULL, if_plot_others = T) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -124,17 +123,16 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
             }
         }
     }
-    p <- ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y,
-        color = st_meta$gene), size = size) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-        ggplot2::labs(x = "x", y = "y", color = gene)
+    p <- ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y, color = st_meta$gene),
+        size = size) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "x",
+        y = "y", color = gene)
     if (is.null(color_mid)) {
         p + ggplot2::scale_color_gradient(low = color_low, high = color_high)
     } else {
         if (is.null(color_midpoint)) {
             color_midpoint <- stats::median(st_meta$gene)
         }
-        p + ggplot2::scale_color_gradient2(low = color_low, mid = color_mid, high = color_high,
-            midpoint = color_midpoint)
+        p + ggplot2::scale_color_gradient2(low = color_low, mid = color_mid, high = color_high, midpoint = color_midpoint)
     }
 }
 
@@ -146,11 +144,10 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
 #' @param size Point size. Default is \code{1}.
 #' @param color_celltype Color for the celltype of interest.
 #' @param color_others Color for the others.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @export
 
-plot_st_celltype <- function(object, celltype, size = 1, color_celltype = "blue",
-    color_others = "grey") {
+plot_st_celltype <- function(object, celltype, size = 1, color_celltype = "blue", color_others = "grey") {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -172,9 +169,8 @@ plot_st_celltype <- function(object, celltype, size = 1, color_celltype = "blue"
     st_meta[st_meta$celltype != celltype, ]$celltype <- "others"
     st_meta$celltype <- factor(st_meta$celltype, levels = c(celltype, "others"))
     ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y, color = st_meta$celltype),
-        size = size) + ggplot2::scale_color_manual(values = c(color_celltype, color_others)) +
-        ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-        ggplot2::labs(x = "x", y = "y", color = "celltype")
+        size = size) + ggplot2::scale_color_manual(values = c(color_celltype, color_others)) + ggplot2::theme_bw() +
+        ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "x", y = "y", color = "celltype")
 }
 
 #' @title Plot spatial density of a single cell type
@@ -191,13 +187,12 @@ plot_st_celltype <- function(object, celltype, size = 1, color_celltype = "blue"
 #' @param color_high Color for the highest value.
 #' @param color_midpoint Value for the middle scale. Default is \code{NULL}.
 #' @param size Line size when type is 'contour'. Default is \code{1}.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @importFrom stats median
 #' @export
 
-plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, point_color = NULL,
-    point_size = 1, color_low = "grey", color_mid = NULL, color_high = "blue", color_midpoint = NULL,
-    size = 1) {
+plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, point_color = NULL, point_size = 1,
+    color_low = "grey", color_mid = NULL, color_high = "blue", color_midpoint = NULL, size = 1) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -225,8 +220,7 @@ plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, 
         point_color <- col_manual[which(cellname == celltype)]
     }
     st_meta <- st_meta[st_meta$celltype == celltype, ]
-    p <- ggplot2::ggplot(data = st_meta, ggplot2::aes(x, y)) + ggplot2::theme_bw() +
-        ggplot2::theme(panel.grid = ggplot2::element_blank())
+    p <- ggplot2::ggplot(data = st_meta, ggplot2::aes(x, y)) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
     if (type == "contour") {
         if (if_plot_point) {
             p <- p + ggplot2::geom_point(size = point_size, color = point_color)
@@ -238,20 +232,17 @@ plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, 
             if (is.null(color_midpoint)) {
                 color_midpoint <- stats::median(st_meta$gene)
             }
-            p + scale_color_gradient2(low = color_low, mid = color_mid, high = color_high,
-                midpoint = color_midpoint)
+            p + scale_color_gradient2(low = color_low, mid = color_mid, high = color_high, midpoint = color_midpoint)
         }
     } else {
-        p <- p + ggplot2::stat_density2d(ggplot2::aes(fill = ..density..), geom = "raster",
-            contour = F)
+        p <- p + ggplot2::stat_density2d(ggplot2::aes(fill = ..density..), geom = "raster", contour = F)
         if (is.null(color_mid)) {
             p + scale_fill_gradient(low = color_low, high = color_high)
         } else {
             if (is.null(color_midpoint)) {
                 color_midpoint <- stats::median(st_meta$gene)
             }
-            p + scale_fill_gradient2(low = color_low, mid = color_mid, high = color_high,
-                midpoint = color_midpoint)
+            p + scale_fill_gradient2(low = color_low, mid = color_mid, high = color_high, midpoint = color_midpoint)
         }
     }
 }
@@ -266,12 +257,12 @@ plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, 
 #' @param color_mid Color for the middle value for using \code{scale_color_gradient2}. Default is \code{NULL}.
 #' @param color_high Color for the highest value.
 #' @param color_midpoint Value for the middle scale. Default is \code{NULL}.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @importFrom stats median
 #' @export
 
-plot_st_celltype_percent <- function(object, celltype, size = 1, color_low = NULL,
-    color_mid = NULL, color_high = NULL, color_midpoint = NULL) {
+plot_st_celltype_percent <- function(object, celltype, size = 1, color_low = NULL, color_mid = NULL, color_high = NULL,
+    color_midpoint = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -292,19 +283,17 @@ plot_st_celltype_percent <- function(object, celltype, size = 1, color_low = NUL
         color_high <- "blue"
     }
     if (is.null(color_mid)) {
-        ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y,
-            color = st_meta$celltype_percent), size = size) + ggplot2::scale_color_gradient(low = color_low,
-            high = color_high) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
-            ggplot2::labs(x = "x", y = "y", color = celltype)
+        ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y, color = st_meta$celltype_percent),
+            size = size) + ggplot2::scale_color_gradient(low = color_low, high = color_high) + ggplot2::theme_bw() +
+            ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "x", y = "y", color = celltype)
     } else {
         if (is.null(color_midpoint)) {
             color_midpoint <- stats::median(st_meta$celltype_percent)
         }
-        ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y,
-            color = st_meta$celltype_percent), size = size) + ggplot2::scale_color_gradient2(low = color_low,
-            mid = color_mid, high = color_high, midpoint = color_midpoint) + ggplot2::theme_bw() +
-            ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "x",
-            y = "y", color = paste0("Percent of ", celltype))
+        ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y, color = st_meta$celltype_percent),
+            size = size) + ggplot2::scale_color_gradient2(low = color_low, mid = color_mid, high = color_high,
+            midpoint = color_midpoint) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
+            ggplot2::labs(x = "x", y = "y", color = paste0("Percent of ", celltype))
     }
 }
 
@@ -314,7 +303,7 @@ plot_st_celltype_percent <- function(object, celltype, size = 1, color_low = NUL
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param size Point size. Default is \code{1}.
 #' @param color Color for all predicted cell types.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @importFrom ggpubr get_palette
 #' @export
 
@@ -336,9 +325,8 @@ plot_st_celltype_all <- function(object, size = 1, color = NULL) {
         col_manual <- color
     }
     ggplot2::ggplot() + ggplot2::geom_point(ggplot2::aes(st_meta$x, st_meta$y, color = st_meta$celltype),
-        size = size) + ggplot2::scale_color_manual(values = col_manual) + ggplot2::theme_bw() +
-        ggplot2::theme(panel.grid = ggplot2::element_blank()) + ggplot2::labs(x = "x",
-        y = "y", color = "celltype")
+        size = size) + ggplot2::scale_color_manual(values = col_manual) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank()) +
+        ggplot2::labs(x = "x", y = "y", color = "celltype")
 }
 
 #' @title Plot heatpmap of correlation between marker genes and cell types
@@ -355,15 +343,14 @@ plot_st_celltype_all <- function(object, size = 1, color = NULL) {
 #' @param if_show_top Whether to plot a symbol to the highest value across rows or columns. Default is \code{TRUE}.
 #' @param top_direction Direction to identify the highest value, select \code{'row'} or \code{'column'}.
 #' @param border_color Color of the cell border. Default is \code{'NA'}.
-#' @import pheatmap methods
+#' @import pheatmap
 #' @importFrom stats cor
 #' @importFrom grDevices colorRampPalette
 #' @importFrom ggpubr get_palette
 #' @export
 
-plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NULL,
-    color_mid = NULL, color_high = NULL, scale = "none", if_show_top = T,
-    top_direction = "row", border_color = NA) {
+plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NULL, color_mid = NULL, color_high = NULL,
+    scale = "none", if_show_top = T, top_direction = "row", border_color = NA) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -467,14 +454,13 @@ plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NUL
 #' @param if_plot_edge Whether to plot edge between neighbors. Default is \code{TRUE}.
 #' @param arrow_length Arrow length.
 #' @param plot_cells Which cells to plot. Default is all cells. Input a character vector of cell names to plot.
-#' @import ggExtra ggplot2 methods
+#' @import ggExtra ggplot2
 #' @importFrom ggpubr get_palette
 #' @importFrom ggExtra ggMarginal
 #' @export
 
-plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL,
-    size = 1, if_plot_others = T, if_plot_density = T, if_plot_edge = T, arrow_length = 0.05,
-    plot_cells = NULL) {
+plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL, size = 1, if_plot_others = T,
+    if_plot_density = T, if_plot_edge = T, arrow_length = 0.05, plot_cells = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -506,8 +492,8 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in%
-        st_meta$cell, ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
+        ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
     cell_pair$x2 <- 0
@@ -523,35 +509,31 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
         cell_pair$y2[i] <- d2$y
     }
     st_meta[!st_meta$celltype %in% c(celltype_sender, celltype_receiver), ]$celltype <- "Others"
-    st_meta[st_meta$celltype == celltype_sender, ]$celltype <- paste0("Sender: ",
-        celltype_sender)
-    st_meta[st_meta$celltype == celltype_receiver, ]$celltype <- paste0("Receiver: ",
-        celltype_receiver)
+    st_meta[st_meta$celltype == celltype_sender, ]$celltype <- paste0("Sender: ", celltype_sender)
+    st_meta[st_meta$celltype == celltype_receiver, ]$celltype <- paste0("Receiver: ", celltype_receiver)
     if (if_plot_others) {
-        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ",
-            celltype_sender), paste0("Receiver: ", celltype_receiver), "Others"))
+        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ",
+            celltype_receiver), "Others"))
     } else {
         st_meta <- st_meta[st_meta$celltype != "Others", ]
-        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ",
-            celltype_sender), paste0("Receiver: ", celltype_receiver)))
+        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ",
+            celltype_receiver)))
     }
     if (is.null(color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         if (if_plot_others) {
-            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname ==
-                celltype_receiver)], "grey80")
+            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
+                "grey80")
         } else {
-            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname ==
-                celltype_receiver)])
+            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)])
         }
     }
-    p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x,
-        y, color = celltype), size = size) + ggplot2::scale_color_manual(values = color) +
-        ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
+    p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x, y, color = celltype),
+        size = size) + ggplot2::scale_color_manual(values = color) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
     if (if_plot_edge) {
-        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2),
-            arrow = arrow(length = unit(arrow_length, "inches"), type = "closed"))
+        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length,
+            "inches"), type = "closed"))
     }
     if (if_plot_density) {
         ggExtra::ggMarginal(p = p, type = "density", groupFill = T)
@@ -572,13 +554,13 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
 #' @param type Set 'sig' to plot significant LR pairs or set 'number' to plot the number of spatial LR interactions.
 #' @param fontsize_number fontsize of the numbers displayed in cells.
 #' @param number_color color of the text.
-#' @import ggplot2 pheatmap methods
+#' @import ggplot2 pheatmap
 #' @importFrom ggpubr get_palette
 #' @importFrom reshape2 dcast
 #' @export
 
-plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrpairs = 20,
-    color = NULL, border_color = "black", type = NULL, fontsize_number = 1, number_color = "black") {
+plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrpairs = 20, color = NULL,
+    border_color = "black", type = NULL, fontsize_number = 1, number_color = "black") {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -606,12 +588,12 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     heat_col <- (grDevices::colorRampPalette(c("white", color)))(2)
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in%
-        st_meta$cell, ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
+        ]
     # get result from dec_cci
     lrpair <- object@lrpair
-    lrpair <- lrpair[lrpair$celltype_sender == celltype_sender & lrpair$celltype_receiver ==
-        celltype_receiver, ]
+    lrpair <- lrpair[lrpair$celltype_sender == celltype_sender & lrpair$celltype_receiver == celltype_receiver,
+        ]
     lrpair <- lrpair[order(-lrpair$score), ]
     if (nrow(lrpair) > top_lrpairs) {
         lrpair <- lrpair[1:top_lrpairs, ]
@@ -622,8 +604,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     lrpair_real <- object@lr_path$lrpairs
     lrpair_real <- lrpair_real[, c(1, 2)]
     lrpair_real$score <- 1
-    lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0,
-        value.var = "score")
+    lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0, value.var = "score")
     rownames(lrpair_mat) <- lrpair_mat$ligand
     lrpair_mat <- lrpair_mat[, -1]
     #
@@ -637,9 +618,8 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     for (i in 1:nrow(lrpair)) {
         plot_res[lrpair$ligand[i], lrpair$receptor[i]] <- "*"
     }
-    pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, color = heat_col,
-        border_color = border_color, legend = F, display_numbers = plot_res, fontsize_number = fontsize_number,
-        number_color = number_color)
+    pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, color = heat_col, border_color = border_color,
+        legend = F, display_numbers = plot_res, fontsize_number = fontsize_number, number_color = number_color)
 }
 
 #' @title Plot LR pair
@@ -656,14 +636,13 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
 #' @param if_plot_edge Whether to plot edge between neighbors. Default is \code{TRUE}.
 #' @param arrow_length Arrow length.
 #' @param plot_cells Which cells to plot. Default is all cells. Input a character vector of cell names to plot.
-#' @import ggExtra ggplot2 methods
+#' @import ggExtra ggplot2
 #' @importFrom ggpubr get_palette
 #' @importFrom ggExtra ggMarginal
 #' @export
 
-plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, receptor,
-    color = NULL, size = 1, if_plot_density = T, if_plot_edge = T, arrow_length = 0.05,
-    plot_cells = NULL) {
+plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, receptor, color = NULL, size = 1,
+    if_plot_density = T, if_plot_edge = T, arrow_length = 0.05, plot_cells = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -704,13 +683,13 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     if (is.null(color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
-        color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname ==
-            celltype_receiver)], "grey80")
+        color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
+            "grey80")
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in%
-        st_meta$cell, ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
+        ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
     cell_pair$x2 <- 0
@@ -729,24 +708,21 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     st_meta$ligand <- as.numeric(st_data[ligand, ])
     st_meta$receptor <- as.numeric(st_data[receptor, ])
     st_meta$Expressed_genes <- "Others"
-    st_meta_ligand <- st_meta[st_meta$celltype == celltype_sender & st_meta$ligand >
-        0, ]
-    st_meta_receptor <- st_meta[st_meta$celltype == celltype_receiver & st_meta$receptor >
-        0, ]
+    st_meta_ligand <- st_meta[st_meta$celltype == celltype_sender & st_meta$ligand > 0, ]
+    st_meta_receptor <- st_meta[st_meta$celltype == celltype_receiver & st_meta$receptor > 0, ]
     celltype_sender <- paste0(celltype_sender, ": ", ligand)
     celltype_receiver <- paste0(celltype_receiver, ": ", receptor)
     st_meta[st_meta$cell %in% st_meta_ligand$cell, ]$Expressed_genes <- celltype_sender
     st_meta[st_meta$cell %in% st_meta_receptor$cell, ]$Expressed_genes <- celltype_receiver
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta_ligand$cell, ]
     cell_pair <- cell_pair[cell_pair$cell_receiver %in% st_meta_receptor$cell, ]
-    st_meta$Expressed_genes <- factor(st_meta$Expressed_genes, levels = c(celltype_sender,
-        celltype_receiver, "Others"))
-    p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x,
-        y, color = Expressed_genes), size = size) + ggplot2::scale_color_manual(values = color) +
-        ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
+    st_meta$Expressed_genes <- factor(st_meta$Expressed_genes, levels = c(celltype_sender, celltype_receiver,
+        "Others"))
+    p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x, y, color = Expressed_genes),
+        size = size) + ggplot2::scale_color_manual(values = color) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
     if (if_plot_edge) {
-        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2),
-            arrow = arrow(length = unit(arrow_length, "inches"), type = "closed"))
+        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length,
+            "inches"), type = "closed"))
     }
     if (if_plot_density) {
         ggExtra::ggMarginal(p = p, type = "density", groupFill = T)
@@ -766,13 +742,13 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
 #' @param vln_color Color for violins. Two values.
 #' @param if_plot_boxplot Whether to plot boxplot. Default is \code{TRUE}.
 #' @param box_width Box width. Default is \code{0.2}.
-#' @import ggplot2 methods
+#' @import ggplot2
 #' @importFrom ggpubr get_palette
 #' @importFrom stats wilcox.test
-#' @export plot_lrpair_vln
+#' @export
 
-plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, receptor,
-    vln_color = NULL, if_plot_boxplot = T, box_width = 0.2) {
+plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, receptor, vln_color = NULL,
+    if_plot_boxplot = T, box_width = 0.2) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -801,14 +777,14 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
     if (is.null(vln_color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
-        vln_color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname ==
-            celltype_receiver)], "grey80")
+        vln_color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
+            "grey80")
     }
     celltype_dist <- object@dist
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in%
-        st_meta$cell, ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
+        ]
     # calculate L-R distance across expressed cell-cell pairs
     ndata_ligand <- st_data[ligand, ]
     ndata_receptor <- st_data[receptor, ]
@@ -829,11 +805,11 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
         print(stats::wilcox.test(celltype_dist1, celltype_dist2, alternative = "greater"))
     }
     d1 <- data.frame(celltype = "All cell-cell pairs", dist = celltype_dist1, stringsAsFactors = F)
-    d2 <- data.frame(celltype = paste0(celltype_sender, "-", celltype_receiver, " pairs"),
-        dist = celltype_dist2, stringsAsFactors = F)
+    d2 <- data.frame(celltype = paste0(celltype_sender, "-", celltype_receiver, " pairs"), dist = celltype_dist2,
+        stringsAsFactors = F)
     lr_dist_plot <- rbind(d1, d2)
-    p <- ggplot(data = lr_dist_plot, aes(x = celltype, y = dist, fill = celltype)) +
-        geom_violin(trim = T) + scale_fill_manual(values = vln_color)
+    p <- ggplot(data = lr_dist_plot, aes(x = celltype, y = dist, fill = celltype)) + geom_violin(trim = T) +
+        scale_fill_manual(values = vln_color)
     if (if_plot_boxplot) {
         p + geom_boxplot(width = box_width, outlier.shape = NA)
     }
@@ -850,12 +826,12 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
 #' @param color Color for points Two values.
 #' @param size Size of points.
 #' @param arrow_length Arrow length.
-#' @import ggplot2 ggrepel methods
+#' @import ggplot2 ggrepel
 #' @importFrom ggpubr get_palette
 #' @export
 
-plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, receptor,
-    color = NULL, size = 5, arrow_length = 0.1) {
+plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, receptor, color = NULL, size = 5,
+    arrow_length = 0.1) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -888,14 +864,12 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     names(tf_gene_all) <- tf_gene_all_new$gene
     tf_path_all <- NULL
     for (i in 1:length(tf_gene_all)) {
-        tf_path <- .get_tf_path(ggi_res, names(tf_gene_all)[i], as.numeric(tf_gene_all[i]),
-            receptor)
+        tf_path <- .get_tf_path(ggi_res, names(tf_gene_all)[i], as.numeric(tf_gene_all[i]), receptor)
         tf_path_all <- rbind(tf_path_all, tf_path)
     }
     tf_path_all$hop <- tf_path_all$hop + 2
     node_x <- unique(tf_path_all[, c("dest", "hop")])
-    plot_node <- data.frame(gene = c(node_x$dest, ligand, receptor), x = c(node_x$hop,
-        1, 2), stringsAsFactors = F)
+    plot_node <- data.frame(gene = c(node_x$dest, ligand, receptor), x = c(node_x$hop, 1, 2), stringsAsFactors = F)
     node_y <- as.data.frame(table(plot_node$x), stringsAsFactors = F)
     node_y_max <- max(node_y$Freq)
     plot_node$y <- 0
@@ -916,20 +890,16 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     }
     plot_node_new$Expression <- 0
     plot_node_new$Celltype <- celltype_receiver
-    st_data_gene <- st_data[plot_node_new$gene, st_meta[st_meta$celltype == celltype_receiver,
-        ]$cell]
+    st_data_gene <- st_data[plot_node_new$gene, st_meta[st_meta$celltype == celltype_receiver, ]$cell]
     plot_node_new$Expression <- as.numeric(rowMeans(as.matrix(st_data_gene)))
-    st_data_ligand <- st_data[ligand, st_meta[st_meta$celltype == celltype_sender,
-        ]$cell]
+    st_data_ligand <- st_data[ligand, st_meta[st_meta$celltype == celltype_sender, ]$cell]
     plot_node_new[plot_node_new$gene == ligand, ]$Expression <- mean(st_data_ligand)
     plot_node_new[plot_node_new$gene == ligand, ]$Celltype <- celltype_sender
-    plot_node_new$Celltype <- factor(plot_node_new$Celltype, levels = c(celltype_sender,
-        celltype_receiver))
+    plot_node_new$Celltype <- factor(plot_node_new$Celltype, levels = c(celltype_sender, celltype_receiver))
     if (is.null(color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
-        col_manual <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname ==
-            celltype_receiver)])
+        col_manual <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)])
     } else {
         col_manual <- color
     }
@@ -941,13 +911,11 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     for (i in 1:nrow(tf_path_all)) {
         gene <- tf_path_all$src[i]
         gene_x <- tf_path_all$src_x[i]
-        plot_node_temp <- plot_node_new[plot_node_new$gene == gene & plot_node_new$x ==
-            gene_x, ]
+        plot_node_temp <- plot_node_new[plot_node_new$gene == gene & plot_node_new$x == gene_x, ]
         tf_path_all$src_y[i] <- plot_node_temp$y
         gene <- tf_path_all$dest[i]
         gene_x <- tf_path_all$dest_x[i]
-        plot_node_temp <- plot_node_new[plot_node_new$gene == gene & plot_node_new$x ==
-            gene_x, ]
+        plot_node_temp <- plot_node_new[plot_node_new$gene == gene & plot_node_new$x == gene_x, ]
         tf_path_all$dest_y[i] <- plot_node_temp$y
     }
     tf_path_all <- tf_path_all[, c("src", "src_x", "src_y", "dest", "dest_x", "dest_y")]
@@ -959,19 +927,17 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     receptor_xy <- receptor_xy[order(receptor_xy$x), ]
     receptor_x <- receptor_xy$x[1]
     receptor_y <- receptor_xy$y[1]
-    tf_path_temp <- data.frame(src = ligand, src_x = ligand_x, src_y = ligand_y,
-        dest = receptor, dest_x = receptor_x, dest_y = receptor_y, stringsAsFactors = F)
+    tf_path_temp <- data.frame(src = ligand, src_x = ligand_x, src_y = ligand_y, dest = receptor, dest_x = receptor_x,
+        dest_y = receptor_y, stringsAsFactors = F)
     tf_path_all <- rbind(tf_path_all, tf_path_temp)
     plot_node_new$tf <- "NO"
     plot_node_new[plot_node_new$gene %in% names(tf_gene_all), ]$tf <- "YES"
-    plot_node_new$Celltype <- factor(plot_node_new$Celltype, levels = c(celltype_sender,
-        celltype_receiver))
-    ggplot2::ggplot() + geom_segment(data = tf_path_all, aes(x = src_x, y = src_y,
-        xend = dest_x, yend = dest_y)) + ggplot2::geom_point(data = plot_node_new,
-        ggplot2::aes(x, y, color = Celltype), size = size) + ggplot2::scale_color_manual(values = col_manual) +
-        ggrepel::geom_label_repel(data = plot_node_new, aes(x, y, label = gene, fill = tf)) +
-        labs(x = NULL, y = NULL) + theme(axis.text = element_blank(), panel.grid = element_blank(),
-        axis.ticks = element_blank(), panel.background = element_rect(fill = "white"))
+    plot_node_new$Celltype <- factor(plot_node_new$Celltype, levels = c(celltype_sender, celltype_receiver))
+    ggplot2::ggplot() + geom_segment(data = tf_path_all, aes(x = src_x, y = src_y, xend = dest_x, yend = dest_y)) +
+        ggplot2::geom_point(data = plot_node_new, ggplot2::aes(x, y, color = Celltype), size = size) +
+        ggplot2::scale_color_manual(values = col_manual) + ggrepel::geom_label_repel(data = plot_node_new,
+        aes(x, y, label = gene, fill = tf)) + labs(x = NULL, y = NULL) + theme(axis.text = element_blank(),
+        panel.grid = element_blank(), axis.ticks = element_blank(), panel.background = element_rect(fill = "white"))
 }
 
 #' @title River plot of significantly activated pathways and related downstream genes of receptors.
@@ -986,17 +952,16 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
 #' @param pvalue P value of the Fisher-exact test.
 #' @param color Color of pathways and genes. Two values.
 #' @param color_flow Color of the flow.
-#' @import ggplot2 ggalluvial methods
+#' @import ggalluvial ggplot2
 #' @export
 
-plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, receptor,
-    min_gene_num = 5, pvalue = 0.5, color = NULL, color_flow = "blue") {
+plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, receptor, min_gene_num = 5,
+    pvalue = 0.5, color = NULL, color_flow = "blue") {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
     }
-    tf_path_all <- get_lr_path(object, celltype_sender, celltype_receiver, ligand,
-        receptor, min_gene_num)[[1]]
+    tf_path_all <- get_lr_path(object, celltype_sender, celltype_receiver, ligand, receptor, min_gene_num)[[1]]
     pathways <- object@lr_path$pathways
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
     st_data <- .get_st_data(object)
@@ -1015,8 +980,7 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
     }
     # pathway
     ggi_pathway <- object@lr_path$pathways
-    rec_pathway_all <- ggi_pathway[ggi_pathway$src == receptor | ggi_pathway$dest ==
-        receptor, ]
+    rec_pathway_all <- ggi_pathway[ggi_pathway$src == receptor | ggi_pathway$dest == receptor, ]
     rec_pathway_all <- unique(rec_pathway_all$pathway)
     rec_pathway_yes <- rep("NO", length(rec_pathway_all))
     rec_pathway_gene <- list()
@@ -1034,9 +998,9 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
             gene_pathway_num <- length(gene_pathway)
             gene_pathway_yes <- intersect(gene_rec, gene_pathway)
             gene_pathway_yes_num <- length(gene_pathway_yes)
-            a <- matrix(c(gene_pathway_yes_num, gene_rec_num - gene_pathway_yes_num,
-                gene_pathway_num - gene_pathway_yes_num, gene_all_num - gene_rec_num +
-                  gene_pathway_yes_num - gene_pathway_num), nrow = 2)
+            a <- matrix(c(gene_pathway_yes_num, gene_rec_num - gene_pathway_yes_num, gene_pathway_num -
+                gene_pathway_yes_num, gene_all_num - gene_rec_num + gene_pathway_yes_num - gene_pathway_num),
+                nrow = 2)
             fisher_pvalue <- fisher.test(a)
             fisher_pvalue <- as.double(fisher_pvalue$p.value)
             rec_pathway_gene[[j]] <- gene_pathway_yes
@@ -1075,11 +1039,11 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
         d1 <- gene2pathway_plot[gene2pathway_plot$type == rec_pathway_all[i], ]
         gene2pathway_plot[gene2pathway_plot$type == rec_pathway_all[i], ]$num <- coef/nrow(d1)
     }
-    p <- ggplot(gene2pathway_plot, aes(x = cluster, y = num, stratum = type, fill = cluster,
-        alluvium = group, label = type)) + ggalluvial::geom_flow(fill = color_flow,
-        alpha = 0.25, width = 0.25) + ggalluvial::geom_stratum(alpha = 1, width = 0.1) +
-        labs(y = NULL) + geom_text(stat = "stratum", size = 3, angle = 0) + theme(axis.text.y.left = element_blank(),
-        panel.grid = element_blank(), axis.ticks = element_blank(), panel.background = element_rect(fill = "white"))
+    p <- ggplot(gene2pathway_plot, aes(x = cluster, y = num, stratum = type, fill = cluster, alluvium = group,
+        label = type)) + ggalluvial::geom_stratum(alpha = 1, width = 0.1) + ggalluvial::geom_flow(fill = color_flow,
+        alpha = 0.25, width = 0.25) + labs(y = NULL) + geom_text(stat = "stratum", size = 3, angle = 0) +
+        theme(axis.text.y.left = element_blank(), panel.grid = element_blank(), axis.ticks = element_blank(),
+            panel.background = element_rect(fill = "white"))
     if (is.null(color)) {
         p
     } else {

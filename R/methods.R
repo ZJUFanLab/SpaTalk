@@ -185,8 +185,7 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     }
     st_ndata <- st_ndata[genename, ]
     sc_ndata <- sc_ndata[genename, ]
-    sc_celltype <- data.frame(cell = colnames(sc_ndata), celltype = sc_celltype,
-        stringsAsFactors = F)
+    sc_celltype <- data.frame(cell = colnames(sc_ndata), celltype = sc_celltype, stringsAsFactors = F)
     sc_celltype$celltype <- stringr::str_replace_all(sc_celltype$celltype, pattern = "-",
         replacement = "_")
     # if_use_all_cores
@@ -278,8 +277,8 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL) {
     st_data <- .get_st_data(object)
     species <- object@para$species
     lrpair <- lrpairs[lrpairs$species == species, ]
-    lrpair <- lrpair[lrpair$ligand %in% rownames(st_data) & lrpair$receptor %in%
-        rownames(st_data), ]
+    lrpair <- lrpair[lrpair$ligand %in% rownames(st_data) & lrpair$receptor %in% rownames(st_data),
+        ]
     if (nrow(lrpair) == 0) {
         stop("No ligand-recepotor pairs found in st_data!")
     }
@@ -361,8 +360,8 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL) {
 #' @importFrom crayon cyan green
 #' @export
 
-dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
-    min_pairs = 5, min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
+dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10, min_pairs = 5,
+    min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
     # check input data
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -482,8 +481,8 @@ dec_cci_all <- function(object, n_neighbor = 10, min_pairs = 5, min_pairs_ratio 
                 ### [2] Downstream targets and TFs
                 max_hop <- object@para$max_hop
                 if (nrow(lrdb) > 0) {
-                  receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver,
-                    lrdb, ggi_tf, cell_pair, st_data, max_hop, co_exp_ratio)
+                  receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb,
+                    ggi_tf, cell_pair, st_data, max_hop, co_exp_ratio)
                   if (!is.null(receptor_tf)) {
                     # calculate score
                     lrdb <- .get_score(lrdb, receptor_tf)

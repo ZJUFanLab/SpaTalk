@@ -375,8 +375,7 @@
         if (nrow(ggi_hop_yes) > 0) {
             ggi_hop_tf <- ggi_res[ggi_res$hop == k + 1, ]
             if (nrow(ggi_hop_tf) > 0) {
-                ggi_hop_yes <- ggi_hop_yes[ggi_hop_yes$dest %in% ggi_hop_tf$src,
-                  ]
+                ggi_hop_yes <- ggi_hop_yes[ggi_hop_yes$dest %in% ggi_hop_tf$src, ]
                 if (nrow(ggi_hop_yes) > 0) {
                   tf_gene <- ggi_hop_yes$hop
                   names(tf_gene) <- ggi_hop_yes$dest
