@@ -1,5 +1,5 @@
 ---
-title: "SpaTalk tutorial"
+title: "SpaTalk tutorial (single-cell ST data)"
 author: "Xin Shao"
 date: "`r Sys.Date()`"
 output:

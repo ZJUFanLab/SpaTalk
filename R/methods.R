@@ -10,6 +10,7 @@
 #' @param y_res Resolution of y coordinate.
 #' @param y_max Max value of y axis.
 #' @return A list of spot st_data and st_meta
+#' @export generate_spot
 #' @importFrom reshape2 dcast
 
 generate_spot <- function(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y_max) {
@@ -139,7 +140,7 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
 #' @importFrom stringr str_replace_all
 #' @importFrom NNLM nnlm
 #' @importFrom stats dist
-#' @export
+#' @export dec_celltype
 
 setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_celltype, min_percent = 0.5,
     min_nFeatures = 10, if_use_normalize_data = T, if_use_hvg = F, if_use_all_cores = T, iter_num = 1000) {
@@ -254,7 +255,7 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
 #' @return SpaTalk object containing the filtered lrpairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan green
-#' @export
+#' @export find_lr_path
 
 setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathways, max_hop = NULL) {
     # check input data
@@ -351,7 +352,7 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
 #' @return SpaTalk object containing the inferred LR pairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan green
-#' @export
+#' @export dec_cci
 
 setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, celltype_receiver,
     n_neighbor = 10, min_pairs = 5, min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
@@ -430,7 +431,7 @@ setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, cel
 #' @return SpaTalk object containing the inferred LR pairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan combine_styles
-#' @export
+#' @export dec_cci_all
 
 setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10, min_pairs = 5,
     min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {

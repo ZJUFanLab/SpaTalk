@@ -1,6 +1,6 @@
 #' @title Plot spatial transcriptomics data
 #'
-#' @description Plot scatterpie for spatial transcriptomics data
+#' @description Plot scatterpie for spot-based ST data
 #' @param st_meta st_meta generated from \code{\link{generate_spot}}
 #' @param pie_scale Scale of each pie to plot. Default is \code{1}.
 #' @param xy_ratio Ratio of y and x coordinates. Default is \code{1}.
@@ -67,7 +67,7 @@ setMethod("plot_st_pie", signature("SpaTalk"), function(object, pie_scale = 1, x
 
 #' @title Plot spatial distribution of gene
 #'
-#' @description Plot spatial distribution of genes for transcriptomics data
+#' @description Point plot with spatial distribution of a gene for transcriptomics data
 #' @details Please set \code{if_use_newmeta} as \code{FALSE} to plot the spatial distribution of gene before \code{\link{dec_celltype}} for spot-based data.
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param gene Symbol of gene, e.g., 'AKT1'.
@@ -140,7 +140,7 @@ setMethod("plot_st_gene", signature("SpaTalk"), function(object, gene, size = 1,
 
 #' @title Plot spatial distribution of a single cell type
 #'
-#' @description Plot spatial distribution of a single predicted cell types for transcriptomics data
+#' @description Ponit plot with spatial distribution of a single predicted cell type for transcriptomics data
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param celltype Name of cell type in the \code{sc_celltype}.
 #' @param size Point size. Default is \code{1}.
@@ -179,7 +179,7 @@ setMethod("plot_st_celltype", signature("SpaTalk"), function(object, celltype, s
 
 #' @title Plot spatial density of a single cell type
 #'
-#' @description Plot spatial density of a single predicted cell types for transcriptomics data
+#' @description Plot spatial density of a single predicted cell type for transcriptomics data
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param celltype Name of cell type in the \code{sc_celltype}.
 #' @param type Select 'contour' or 'raster'.
@@ -456,7 +456,7 @@ setMethod("plot_st_cor_heatmap", signature("SpaTalk"), function(object, marker_g
 
 #' @title Plot cell-cell distribution
 #'
-#' @description Plot spatial distribution of celltype_sender and celltype_receiver
+#' @description Point plot with spatial distribution of celltype_sender and celltype_receiver
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param celltype_sender Name of celltype_sender.
 #' @param celltype_receiver Name of celltype_receiver.
@@ -559,7 +559,7 @@ setMethod("plot_ccdist", signature("SpaTalk"), function(object, celltype_sender,
 
 #' @title Plot LR pairs
 #'
-#' @description Plot LR pairs of celltype_sender and celltype_receiver
+#' @description Heatmap with LR pairs of celltype_sender and celltype_receiver
 #' @param object SpaTalk object generated from \code{\link{dec_cci}}.
 #' @param celltype_sender Name of celltype_sender.
 #' @param celltype_receiver Name of celltype_receiver.
@@ -637,7 +637,7 @@ setMethod("plot_cci_lrpairs", signature("SpaTalk"), function(object, celltype_se
 
 #' @title Plot LR pair
 #'
-#' @description Plot LR pair between celltype_sender and celltype_receiver
+#' @description Point plot with LR pair from celltype_sender to celltype_receiver
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param celltype_sender Name of celltype_sender.
 #' @param celltype_receiver Name of celltype_receiver.
@@ -748,7 +748,7 @@ setMethod("plot_lrpair", signature("SpaTalk"), function(object, celltype_sender,
 
 #' @title Plot spatial distance of LR pair with vlnplot
 #'
-#' @description Plot spatial distance of LR pair between expressed senders and receivers and between expressed cell-cell pairs.
+#' @description Violin plot spatial distance of LR pair between expressed senders and receivers and between expressed cell-cell pairs.
 #' @param object SpaTalk object generated from \code{\link{dec_celltype}}.
 #' @param celltype_sender Name of celltype_sender.
 #' @param celltype_receiver Name of celltype_receiver.
@@ -832,7 +832,7 @@ setMethod("plot_lrpair_vln", signature("SpaTalk"), function(object, celltype_sen
 
 #' @title Plot LR and downstream pathways
 #'
-#' @description Plot LR and downstream pathways
+#' @description Plot network with LR and downstream pathways
 #' @param object SpaTalk object generated from \code{\link{dec_cci}}.
 #' @param celltype_sender Name of celltype_sender.
 #' @param celltype_receiver Name of celltype_receiver.

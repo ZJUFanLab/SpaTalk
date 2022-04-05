@@ -24,24 +24,24 @@ obj <- dec_celltype(object = obj, sc_data = as.matrix(starmap_data),sc_celltype 
 obj <- find_lr_path(object = obj, lrpairs = lrpairs, pathways = pathways)
 obj <- dec_cci_all(object = obj)
 
-# seqFish
-devtools::load_all('github_repo/SpaTalk/')
+# plot_st_pie()
+plot_st_pie(object = obj, pie_scale = 1.3, xy_ratio = 1.8)
 
-for (i in 1:7) {
-    st_meta <- seqfish_ob_meta_raw[seqfish_ob_meta_raw$View == i-1,]
-    st_data <- seqfish_ob_data_raw[,st_meta$cell]
-}
+plot_st_gene(object = obj,gene = 'Plp1',size = 4, if_use_newmeta = F)
+plot_st_gene(object = obj,gene = 'Plp1', if_use_newmeta = T)
 
-obj <- createSpaTalk(st_data = as.matrix(st_data), st_meta = st_meta[, c("cell","x","y")],
-                     species = "Mouse", if_st_is_sc = T, spot_max_cell = 1)
-obj <- dec_celltype(object = obj, sc_data = as.matrix(st_data),sc_celltype = st_meta$celltype)
-obj@meta$rawmeta$celltype <- st_meta$celltype
-obj <- find_lr_path(object = obj, lrpairs = lrpairs, pathways = pathways)
-obj <- dec_cci_all(object = obj)
+plot_st_celltype(object = obj,celltype = 'Oligo')
 
+plot_st_celltype_density(object = obj,celltype = 'Oligo',type = 'raster',color_low = 'purple',color_high = 'yellow')
 
+plot_st_celltype_percent(object = obj,celltype = 'Oligo',size = 4)
 
+plot_st_celltype_all(object = obj)
 
+plot_st_cor_heatmap(object = obj,marker_genes = c("Plp1","Vip","Sst","Lamp5","Pcp4","Mfge8","Pvalb"),
+                    celltypes = c("Oligo","VIP","SST","eL2_3","eL6","Astro","PVALB"),scale = "none",
+                    if_use_newmeta = F,color_low = 'blue',color_high = 'yellow',color_mid = 'yellow')
 
-
-
+# plot_st_cor_heatmap `color_midpoint`
+plot_st_cor_heatmap(object = obj,marker_genes = c("Plp1","Vip","Sst"),
+                    celltypes = c("eL5","eL6"),scale = "none",if_use_newmeta = T)
