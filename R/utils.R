@@ -6,7 +6,8 @@
     ref_celltype <- unique(sc_celltype$celltype)
     sc_ref <- list()
     for (i in 1:length(ref_celltype)) {
-        sc_data_celltype <- sc_ndata[, sc_celltype[sc_celltype$celltype == ref_celltype[i], ]$cell]
+        sc_data_celltype <- sc_ndata[, sc_celltype[sc_celltype$celltype == ref_celltype[i],
+            ]$cell]
         if (is(sc_data_celltype, "dgCMatrix")) {
             sc_ref[[i]] <- rowMeans(sc_data_celltype)
             names(sc_ref)[i] <- ref_celltype[i]
@@ -142,12 +143,13 @@
     newmeta_spotname <- unique(newmeta$spot)
     newmeta_cell <- NULL
     cat(crayon::cyan("Generating single-cell data for each spot", "\n"))
-    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull", total = length(newmeta_spotname),
-        clear = FALSE, width = 60, complete = "+", incomplete = "-")
+    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull",
+        total = length(newmeta_spotname), clear = FALSE, width = 60, complete = "+",
+        incomplete = "-")
     for (i in 1:length(newmeta_spotname)) {
         spot_name <- newmeta_spotname[i]
-        newmeta_spot <- .generate_newmeta_spot(spot_name, newmeta, st_ndata, sc_ndata, sc_celltype,
-            iter_num)
+        newmeta_spot <- .generate_newmeta_spot(spot_name, newmeta, st_ndata, sc_ndata,
+            sc_celltype, iter_num)
         newmeta_cell <- rbind(newmeta_cell, newmeta_spot)
         pb$tick()
     }
@@ -156,7 +158,8 @@
     return(newmeta_cell)
 }
 
-.generate_newmeta_spot <- function(spot_name, newmeta, st_ndata, sc_ndata, sc_celltype, iter_num) {
+.generate_newmeta_spot <- function(spot_name, newmeta, st_ndata, sc_ndata, sc_celltype,
+    iter_num) {
     newmeta_spot <- newmeta[newmeta$spot == spot_name, ]
     spot_ndata <- as.numeric(st_ndata[, spot_name])
     # random sampling
@@ -225,7 +228,8 @@
     return(st_data)
 }
 
-.get_cellpair <- function(celltype_dist, st_meta, celltype_sender, celltype_receiver, n_neighbor) {
+.get_cellpair <- function(celltype_dist, st_meta, celltype_sender, celltype_receiver,
+    n_neighbor) {
     cell_sender <- st_meta[st_meta$celltype == celltype_sender, ]
     cell_receiver <- st_meta[st_meta$celltype == celltype_receiver, ]
     cell_pair <- list()
@@ -258,10 +262,10 @@
     x_p <- length(x_per[x_per >= x_real])/length(x_per)
 }
 
-.lr_distance <- function(st_data, cell_pair, lrdb, celltype_sender, celltype_receiver, per_num,
-    pvalue) {
-    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull", total = per_num,
-        clear = FALSE, width = 60, complete = "+", incomplete = "-")
+.lr_distance <- function(st_data, cell_pair, lrdb, celltype_sender, celltype_receiver,
+    per_num, pvalue) {
+    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull",
+        total = per_num, clear = FALSE, width = 60, complete = "+", incomplete = "-")
     ### [1] LR distance
     lrdb$celltype_sender <- celltype_sender
     lrdb$celltype_receiver <- celltype_receiver
@@ -294,7 +298,8 @@
     return(lrdb)
 }
 
-.generate_ggi_res <- function(ggi_tf, cell_pair, receptor_name, st_data, max_hop, co_exp_ratio) {
+.generate_ggi_res <- function(ggi_tf, cell_pair, receptor_name, st_data, max_hop,
+    co_exp_ratio) {
     # generate ggi_res
     ggi_res <- NULL
     ggi_tf1 <- ggi_tf[ggi_tf$src == receptor_name, ]
@@ -342,7 +347,8 @@
                 ggi_res_temp1 <- ggi_res_temp[((i - 1) * 5000 + 1):(5000 * i), ]
                 i <- i + 1
             } else {
-                ggi_res_temp1 <- ggi_res_temp[((i - 1) * 5000 + 1):nrow(ggi_res_temp), ]
+                ggi_res_temp1 <- ggi_res_temp[((i - 1) * 5000 + 1):nrow(ggi_res_temp),
+                  ]
             }
         }
         ndata_src <- st_data[ggi_res_temp1$src, cell_receiver]
@@ -369,7 +375,8 @@
         if (nrow(ggi_hop_yes) > 0) {
             ggi_hop_tf <- ggi_res[ggi_res$hop == k + 1, ]
             if (nrow(ggi_hop_tf) > 0) {
-                ggi_hop_yes <- ggi_hop_yes[ggi_hop_yes$dest %in% ggi_hop_tf$src, ]
+                ggi_hop_yes <- ggi_hop_yes[ggi_hop_yes$dest %in% ggi_hop_tf$src,
+                  ]
                 if (nrow(ggi_hop_yes) > 0) {
                   tf_gene <- ggi_hop_yes$hop
                   names(tf_gene) <- ggi_hop_yes$dest
@@ -384,14 +391,16 @@
     return(tf_gene_all)
 }
 
-.generate_tf_res <- function(tf_gene_all, celltype_sender, celltype_receiver, receptor_name, ggi_res) {
+.generate_tf_res <- function(tf_gene_all, celltype_sender, celltype_receiver, receptor_name,
+    ggi_res) {
     receptor_tf_temp <- data.frame(celltype_sender = celltype_sender, celltype_receiver = celltype_receiver,
-        receptor = receptor_name, tf = names(tf_gene_all), n_hop = as.numeric(tf_gene_all), n_target = 0,
-        stringsAsFactors = F)
+        receptor = receptor_name, tf = names(tf_gene_all), n_hop = as.numeric(tf_gene_all),
+        n_target = 0, stringsAsFactors = F)
     tf_names <- names(tf_gene_all)
     tf_n_hop <- as.numeric(tf_gene_all)
     for (i in 1:length(tf_names)) {
-        ggi_res_tf <- ggi_res[ggi_res$src == tf_names[i] & ggi_res$hop == tf_n_hop[i] + 1, ]
+        ggi_res_tf <- ggi_res[ggi_res$src == tf_names[i] & ggi_res$hop == tf_n_hop[i] +
+            1, ]
         receptor_tf_temp$n_target[i] <- length(unique(ggi_res_tf$dest))
     }
     return(receptor_tf_temp)
@@ -403,9 +412,10 @@
         receptor_name <- lrdb$receptor[j]
         score_lr <- 1 - lrdb$lr_co_ratio_pvalue[j]
         if (receptor_name %in% receptor_tf$receptor) {
-            receptor_tf_temp <- receptor_tf[receptor_tf$receptor == receptor_name, ]
-            receptor_tf_temp$score_rt <- receptor_tf_temp$n_target*receptor_tf_temp$score/receptor_tf_temp$n_hop
-            score_rt <- sum(receptor_tf_temp$score_rt)*(-1)
+            receptor_tf_temp <- receptor_tf[receptor_tf$receptor == receptor_name,
+                ]
+            receptor_tf_temp$score_rt <- receptor_tf_temp$n_target * receptor_tf_temp$score/receptor_tf_temp$n_hop
+            score_rt <- sum(receptor_tf_temp$score_rt) * (-1)
             score_rt <- 1/(1 + exp(score_rt))
             lrdb$score[j] <- sqrt(score_lr * score_rt)
         }
@@ -418,18 +428,21 @@
     }
 }
 
-.get_tf_res <- function(celltype_sender, celltype_receiver, lrdb, ggi_tf, cell_pair, st_data,
-    max_hop, co_exp_ratio) {
+.get_tf_res <- function(celltype_sender, celltype_receiver, lrdb, ggi_tf, cell_pair,
+    st_data, max_hop, co_exp_ratio) {
     receptor_tf <- NULL
     receptor_name <- unique(lrdb$receptor)
-    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull", total = length(receptor_name),
-        clear = FALSE, width = 60, complete = "+", incomplete = "-")
+    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull",
+        total = length(receptor_name), clear = FALSE, width = 60, complete = "+",
+        incomplete = "-")
     for (j in 1:length(receptor_name)) {
         # generate ggi_res
-        ggi_res <- .generate_ggi_res(ggi_tf, cell_pair, receptor_name[j], st_data, max_hop, co_exp_ratio)
+        ggi_res <- .generate_ggi_res(ggi_tf, cell_pair, receptor_name[j], st_data,
+            max_hop, co_exp_ratio)
         if (nrow(ggi_res) > 0) {
             tf_gene_all <- .generate_tf_gene_all(ggi_res, max_hop)
-            tf_gene_all <- data.frame(gene = names(tf_gene_all), hop = tf_gene_all, stringsAsFactors = F)
+            tf_gene_all <- data.frame(gene = names(tf_gene_all), hop = tf_gene_all,
+                stringsAsFactors = F)
             tf_gene_all_new <- unique(tf_gene_all)
             tf_gene_all <- tf_gene_all_new$hop
             names(tf_gene_all) <- tf_gene_all_new$gene
@@ -437,8 +450,8 @@
             if (!is.null(tf_gene_all)) {
                 ggi_res[ggi_res$dest %in% names(tf_gene_all), ]$dest_tf_enrich <- "YES"
                 # generate tf res
-                receptor_tf_temp <- .generate_tf_res(tf_gene_all, celltype_sender, celltype_receiver,
-                  receptor_name[j], ggi_res)
+                receptor_tf_temp <- .generate_tf_res(tf_gene_all, celltype_sender,
+                  celltype_receiver, receptor_name[j], ggi_res)
                 # random walk
                 receptor_tf_temp$score <- .random_walk(receptor_tf_temp, ggi_res)
                 receptor_tf <- rbind(receptor_tf, receptor_tf_temp)
@@ -449,22 +462,22 @@
     return(receptor_tf)
 }
 
-.random_walk <- function(receptor_tf, ggi_res){
+.random_walk <- function(receptor_tf, ggi_res) {
     receptor_name <- unique(receptor_tf$receptor)
     tf_score <- rep(0, nrow(receptor_tf))
     names(tf_score) <- receptor_tf$tf
     max_n_hop <- 10
     for (i in 1:10000) {
-        ggi_res1 <- ggi_res[ggi_res$src == receptor_name,]
+        ggi_res1 <- ggi_res[ggi_res$src == receptor_name, ]
         n_hop <- 1
         while (nrow(ggi_res1) > 0 & n_hop <= max_n_hop) {
-            target_name <- sample(x = 1:nrow(ggi_res1),size = 1)
-            ggi_res1 <- ggi_res1[target_name,]
+            target_name <- sample(x = 1:nrow(ggi_res1), size = 1)
+            ggi_res1 <- ggi_res1[target_name, ]
             if (ggi_res1$dest %in% names(tf_score)) {
-                tf_score[ggi_res1$dest] <- tf_score[ggi_res1$dest]+1
+                tf_score[ggi_res1$dest] <- tf_score[ggi_res1$dest] + 1
             }
-            ggi_res1 <- ggi_res[ggi_res$src == ggi_res1$dest,]
-            n_hop <- n_hop+1
+            ggi_res1 <- ggi_res[ggi_res$src == ggi_res1$dest, ]
+            n_hop <- n_hop + 1
         }
     }
     tf_score <- as.numeric(tf_score/10000)
@@ -478,7 +491,8 @@
     if (tf_hop > 1) {
         tf_hop_new <- tf_hop - 1
         for (i in tf_hop_new:1) {
-            ggi_res2 <- ggi_res[ggi_res$dest %in% ggi_res1$src & ggi_res$hop == i, ]
+            ggi_res2 <- ggi_res[ggi_res$dest %in% ggi_res1$src & ggi_res$hop == i,
+                ]
             ggi_res1 <- ggi_res1[ggi_res1$src %in% ggi_res2$dest, ]
             ggi_res2 <- ggi_res2[ggi_res2$dest %in% ggi_res1$src, ]
             if (i == tf_hop_new) {
@@ -495,7 +509,8 @@
     ggi_res1 <- tf_path[tf_path$src == receptor & tf_path$hop == 1, ]
     if (tf_hop > 1) {
         for (i in 2:tf_hop) {
-            ggi_res2 <- tf_path[tf_path$src %in% ggi_res1$dest & tf_path$hop == i, ]
+            ggi_res2 <- tf_path[tf_path$src %in% ggi_res1$dest & tf_path$hop == i,
+                ]
             ggi_res2 <- ggi_res2[ggi_res2$src %in% ggi_res1$dest, ]
             if (i == 2) {
                 tf_path_new <- rbind(tf_path_new, ggi_res1, ggi_res2)

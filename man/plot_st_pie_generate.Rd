@@ -16,5 +16,5 @@ plot_st_pie_generate(st_meta, pie_scale = 1, xy_ratio = 1, color = NULL)
 \item{color}{Filled of colors for pie plot, length of \code{color} must be equal to the number of unique cell types in \code{sc_celltype}.}
 }
 \description{
-Plot scatterpie for spatial transcriptomics data
+Plot scatterpie for spot-based ST data
 }

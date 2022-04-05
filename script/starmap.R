@@ -42,6 +42,4 @@ plot_st_cor_heatmap(object = obj,marker_genes = c("Plp1","Vip","Sst","Lamp5","Pc
                     celltypes = c("Oligo","VIP","SST","eL2_3","eL6","Astro","PVALB"),scale = "none",
                     if_use_newmeta = F,color_low = 'blue',color_high = 'yellow',color_mid = 'yellow')
 
-# plot_st_cor_heatmap `color_midpoint`
-plot_st_cor_heatmap(object = obj,marker_genes = c("Plp1","Vip","Sst"),
-                    celltypes = c("eL5","eL6"),scale = "none",if_use_newmeta = T)
+

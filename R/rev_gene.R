@@ -7,7 +7,7 @@
 #' @param geneinfo A data.frame of the system data containing gene symbols of \code{'Human'} and \code{'Mouse'} updated on June 30, 2021 for revising count matrix.
 #' @return A new matrix or data.frame.
 #' @importFrom crayon red cyan green
-#' @export rev_gene
+#' @export
 
 rev_gene <- function(data = NULL, data_type = NULL, species = NULL, geneinfo = NULL) {
     if (is.null(data)) {
@@ -58,7 +58,8 @@ rev_gene <- function(data = NULL, data_type = NULL, species = NULL, geneinfo = N
                 }
                 genename3 <- c(genename1, genename3)
                 genename4 <- c(genename1, genename4)
-                genedata <- data.frame(raw_name = genename3, new_name = genename4, stringsAsFactors = F)
+                genedata <- data.frame(raw_name = genename3, new_name = genename4,
+                  stringsAsFactors = F)
                 genedata <- genedata[!genedata$new_name == "NA", ]
                 genedata1 <- as.data.frame(table(genedata$new_name), stringsAsFactors = F)
                 genedata1 <- genedata1[genedata1$Freq == 1, ]
@@ -133,7 +134,8 @@ rev_gene <- function(data = NULL, data_type = NULL, species = NULL, geneinfo = N
         }
         cat(crayon::cyan("Revising gene symbols for pathways data.frame", "\n"))
         Sys.sleep(1)
-        if (all(c("src", "dest", "pathway", "type", "src_tf", "dest_tf", "species") %in% colnames(data))) {
+        if (all(c("src", "dest", "pathway", "type", "src_tf", "dest_tf", "species") %in%
+            colnames(data))) {
             # src
             genename <- unique(data$src)
             genename1 <- genename[genename %in% geneinfo$symbol]

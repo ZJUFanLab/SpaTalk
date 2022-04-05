@@ -10,7 +10,7 @@
 #' @param y_res Resolution of y coordinate.
 #' @param y_max Max value of y axis.
 #' @return A list of spot st_data and st_meta
-#' @export generate_spot
+#' @export
 #' @importFrom reshape2 dcast
 
 generate_spot <- function(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y_max) {
@@ -41,7 +41,8 @@ generate_spot <- function(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y
     # test_spot_data -- sum
     test_spot_data <- list()
     for (i in 1:nrow(test_spot_meta)) {
-        test_spot_cell <- st_data[, st_meta[st_meta$spot == test_spot_meta$Var1[i], ]$cell]
+        test_spot_cell <- st_data[, st_meta[st_meta$spot == test_spot_meta$Var1[i],
+            ]$cell]
         if (!is.matrix(test_spot_cell)) {
             test_spot_sum <- test_spot_cell
         }
@@ -72,7 +73,7 @@ generate_spot <- function(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y
 #' @param spot_max_cell A integer meaning max cell number for each plot to predict. If \code{if_st_sc} is \code{FALSE}, please determine the \code{spot_max_cell}.
 #' @return SpaTalk object
 #' @importFrom methods as
-#' @export createSpaTalk
+#' @export
 
 createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell) {
     if (!is.matrix(st_data)) {
@@ -116,8 +117,8 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
     st_meta$cell_num <- spot_max_cell
     # generate SpaTalk object
     st_data <- methods::as(st_data, Class = "dgCMatrix")
-    object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta), para = list(species = species,
-        st_type = st_type, spot_max_cell = spot_max_cell))
+    object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
+        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell))
     return(object)
 }
 
@@ -140,10 +141,10 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
 #' @importFrom stringr str_replace_all
 #' @importFrom NNLM nnlm
 #' @importFrom stats dist
-#' @export dec_celltype
+#' @export
 
-setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_celltype, min_percent = 0.5,
-    min_nFeatures = 10, if_use_normalize_data = T, if_use_hvg = F, if_use_all_cores = T, iter_num = 1000) {
+dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nFeatures = 10,
+    if_use_normalize_data = T, if_use_hvg = F, if_use_all_cores = T, iter_num = 1000) {
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
     }
@@ -184,8 +185,10 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
     }
     st_ndata <- st_ndata[genename, ]
     sc_ndata <- sc_ndata[genename, ]
-    sc_celltype <- data.frame(cell = colnames(sc_ndata), celltype = sc_celltype, stringsAsFactors = F)
-    sc_celltype$celltype <- stringr::str_replace_all(sc_celltype$celltype, pattern = "-", replacement = "_")
+    sc_celltype <- data.frame(cell = colnames(sc_ndata), celltype = sc_celltype,
+        stringsAsFactors = F)
+    sc_celltype$celltype <- stringr::str_replace_all(sc_celltype$celltype, pattern = "-",
+        replacement = "_")
     # if_use_all_cores
     if (if_use_all_cores) {
         n.threads <- 0
@@ -210,8 +213,8 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
     # generate sc_ref data
     sc_ref <- .generate_ref(sc_ndata, sc_celltype)
     # deconvolution
-    st_nnlm <- NNLM::nnlm(x = as.matrix(sc_ref), y = as.matrix(st_ndata), method = "lee", loss = "mkl",
-        n.threads = n.threads)
+    st_nnlm <- NNLM::nnlm(x = as.matrix(sc_ref), y = as.matrix(st_ndata), method = "lee",
+        loss = "mkl", n.threads = n.threads)
     st_coef <- t(st_nnlm$coefficients)
     object@coef <- st_coef
     st_meta$celltype <- "unsure"
@@ -224,7 +227,8 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
     } else {
         genename <- rownames(st_ndata)
         newmeta <- .generate_newmeta(genename, st_meta, st_dist, min_percent)
-        newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num)
+        newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype,
+            iter_num)
         if (if_use_hvg) {
             sc_ndata <- sc_ndata_raw
         }
@@ -243,7 +247,7 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
     object@para$if_use_hvg <- if_use_hvg
     object@para$iter_num <- iter_num
     return(object)
-})
+}
 
 #' @title Find lrpairs and pathways
 #'
@@ -255,9 +259,9 @@ setMethod("dec_celltype", signature("SpaTalk"), function(object, sc_data, sc_cel
 #' @return SpaTalk object containing the filtered lrpairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan green
-#' @export find_lr_path
+#' @export
 
-setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathways, max_hop = NULL) {
+find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL) {
     # check input data
     cat(crayon::cyan("Checking input data", "\n"))
     if (!is(object, "SpaTalk")) {
@@ -266,21 +270,22 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
     if (!all(c("ligand", "receptor", "species") %in% names(lrpairs))) {
         stop("Please provide a correct lrpairs data.frame! See demo_lrpairs()!")
     }
-    if (!all(c("src", "dest", "pathway", "source", "type", "src_tf", "dest_tf", "species") %in% names(pathways))) {
+    if (!all(c("src", "dest", "pathway", "source", "type", "src_tf", "dest_tf", "species") %in%
+        names(pathways))) {
         stop("Please provide a correct pathways data.frame! See demo_pathways()!")
     }
     st_meta <- .get_st_meta(object)
     st_data <- .get_st_data(object)
     species <- object@para$species
     lrpair <- lrpairs[lrpairs$species == species, ]
-    lrpair <- lrpair[lrpair$ligand %in% rownames(st_data) & lrpair$receptor %in% rownames(st_data),
-        ]
+    lrpair <- lrpair[lrpair$ligand %in% rownames(st_data) & lrpair$receptor %in%
+        rownames(st_data), ]
     if (nrow(lrpair) == 0) {
         stop("No ligand-recepotor pairs found in st_data!")
     }
     pathways <- pathways[pathways$species == species, ]
-    pathways <- pathways[pathways$src %in% rownames(st_data) & pathways$dest %in% rownames(st_data),
-        ]
+    pathways <- pathways[pathways$src %in% rownames(st_data) & pathways$dest %in%
+        rownames(st_data), ]
     ggi_tf <- pathways[, c("src", "dest", "src_tf", "dest_tf")]
     ggi_tf <- unique(ggi_tf)
     lrpair <- lrpair[lrpair$receptor %in% ggi_tf$src, ]
@@ -299,8 +304,9 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
     res_ggi <- NULL
     receptor_name <- unique(lrpair$receptor)
     Sys.sleep(2)
-    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull", total = length(receptor_name),
-        clear = FALSE, width = 60, complete = "+", incomplete = "-")
+    pb <- progress::progress_bar$new(format = "[:bar] Finished::percent Time :elapsedfull",
+        total = length(receptor_name), clear = FALSE, width = 60, complete = "+",
+        incomplete = "-")
     for (i in 1:length(receptor_name)) {
         ggi_res <- NULL
         lr_receptor <- receptor_name[i]
@@ -320,7 +326,8 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
                 n <- n + 1
             }
             ggi_res <- unique(ggi_res)
-            ggi_res_yes <- ggi_res[ggi_res$src_tf == "YES" | ggi_res$dest_tf == "YES", ]
+            ggi_res_yes <- ggi_res[ggi_res$src_tf == "YES" | ggi_res$dest_tf == "YES",
+                ]
             if (nrow(ggi_res_yes) > 0) {
                 res_ggi <- c(res_ggi, lr_receptor)
             }
@@ -335,7 +342,7 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
     object@lr_path <- list(lrpairs = lrpair, pathways = pathways)
     object@para$max_hop <- max_hop
     return(object)
-})
+}
 
 #' @title Decomposing cell-cell communications for spatial transciptomics data
 #'
@@ -352,10 +359,10 @@ setMethod("find_lr_path", signature("SpaTalk"), function(object, lrpairs, pathwa
 #' @return SpaTalk object containing the inferred LR pairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan green
-#' @export dec_cci
+#' @export
 
-setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, celltype_receiver,
-    n_neighbor = 10, min_pairs = 5, min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
+dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
+    min_pairs = 5, min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
     # check input data
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -363,7 +370,8 @@ setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, cel
     st_meta <- .get_st_meta(object)
     st_data <- .get_st_data(object)
     celltype_dist <- object@dist
-    cell_pair <- .get_cellpair(celltype_dist, st_meta, celltype_sender, celltype_receiver, n_neighbor)
+    cell_pair <- .get_cellpair(celltype_dist, st_meta, celltype_sender, celltype_receiver,
+        n_neighbor)
     cell_sender <- st_meta[st_meta$celltype == celltype_sender, ]
     cell_receiver <- st_meta[st_meta$celltype == celltype_receiver, ]
     cell_pair_all <- nrow(cell_sender) * nrow(cell_receiver)/2
@@ -380,13 +388,13 @@ setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, cel
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
     cat(crayon::cyan("Begin to find LR pairs", "\n"))
     ### [1] LR distance
-    lrdb <- .lr_distance(st_data, cell_pair, lrdb, celltype_sender, celltype_receiver, per_num,
-        pvalue)
+    lrdb <- .lr_distance(st_data, cell_pair, lrdb, celltype_sender, celltype_receiver,
+        per_num, pvalue)
     ### [2] Downstream targets and TFs
     max_hop <- object@para$max_hop
     if (nrow(lrdb) > 0) {
-        receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb, ggi_tf, cell_pair,
-            st_data, max_hop, co_exp_ratio)
+        receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb, ggi_tf,
+            cell_pair, st_data, max_hop, co_exp_ratio)
         if (is.null(receptor_tf)) {
             stop(paste0("No LR pairs found between ", celltype_sender, " and ", celltype_receiver))
         }
@@ -416,7 +424,7 @@ setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, cel
     object@para$pvalue <- pvalue
     object@para$co_exp_ratio <- co_exp_ratio
     return(object)
-})
+}
 
 #' @title Decomposing cell-cell communications for spatial transciptomics data
 #'
@@ -431,10 +439,10 @@ setMethod("dec_cci", signature("SpaTalk"), function(object, celltype_sender, cel
 #' @return SpaTalk object containing the inferred LR pairs and pathways.
 #' @import Matrix progress methods
 #' @importFrom crayon cyan combine_styles
-#' @export dec_cci_all
+#' @export
 
-setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10, min_pairs = 5,
-    min_pairs_ratio = 0, per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
+dec_cci_all <- function(object, n_neighbor = 10, min_pairs = 5, min_pairs_ratio = 0,
+    per_num = 1000, pvalue = 0.05, co_exp_ratio = 0.1) {
     # check input data
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -474,8 +482,8 @@ setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10,
                 ### [2] Downstream targets and TFs
                 max_hop <- object@para$max_hop
                 if (nrow(lrdb) > 0) {
-                  receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb, ggi_tf,
-                    cell_pair, st_data, max_hop, co_exp_ratio)
+                  receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver,
+                    lrdb, ggi_tf, cell_pair, st_data, max_hop, co_exp_ratio)
                   if (!is.null(receptor_tf)) {
                     # calculate score
                     lrdb <- .get_score(lrdb, receptor_tf)
@@ -509,7 +517,8 @@ setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10,
             }
         }
         sym <- crayon::combine_styles("bold", "green")
-        cat(sym("***Done***"), paste0(celltype_sender, " -- ", celltype_receiver), "\n")
+        cat(sym("***Done***"), paste0(celltype_sender, " -- ", celltype_receiver),
+            "\n")
     }
     object@para$min_pairs <- min_pairs
     object@para$min_pairs_ratio <- min_pairs_ratio
@@ -517,7 +526,7 @@ setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10,
     object@para$pvalue <- pvalue
     object@para$co_exp_ratio <- co_exp_ratio
     return(object)
-})
+}
 
 #' @title Get LR and downstream pathways
 #'
@@ -531,10 +540,10 @@ setMethod("dec_cci_all", signature("SpaTalk"), function(object, n_neighbor = 10,
 #' @return A list containing two data.frame. One is LR and downstream pathways, another is the p value of receptor-related pathways with LR-target genes.
 #' @import methods
 #' @importFrom stats fisher.test
-#' @export get_lr_path
+#' @export
 
-setMethod("get_lr_path", signature("SpaTalk"), function(object, celltype_sender, celltype_receiver,
-    ligand, receptor, min_gene_num = 5) {
+get_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, receptor,
+    min_gene_num = 5) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -567,13 +576,14 @@ setMethod("get_lr_path", signature("SpaTalk"), function(object, celltype_sender,
     names(tf_gene_all) <- tf_gene_all_new$gene
     tf_path_all <- NULL
     for (i in 1:length(tf_gene_all)) {
-        tf_path <- .get_tf_path(ggi_res, names(tf_gene_all)[i], as.numeric(tf_gene_all[i]), receptor)
+        tf_path <- .get_tf_path(ggi_res, names(tf_gene_all)[i], as.numeric(tf_gene_all[i]),
+            receptor)
         tf_path_all <- rbind(tf_path_all, tf_path)
     }
     # pathway
     ggi_pathway <- object@lr_path$pathways
-    rec_pathway_all <- ggi_pathway[ggi_pathway$src == receptor | ggi_pathway$dest == receptor,
-        ]
+    rec_pathway_all <- ggi_pathway[ggi_pathway$src == receptor | ggi_pathway$dest ==
+        receptor, ]
     rec_pathway_all <- unique(rec_pathway_all$pathway)
     rec_pathway_yes <- rep("NO", length(rec_pathway_all))
     rec_pathway_gene <- list()
@@ -591,9 +601,9 @@ setMethod("get_lr_path", signature("SpaTalk"), function(object, celltype_sender,
             gene_pathway_num <- length(gene_pathway)
             gene_pathway_yes <- intersect(gene_rec, gene_pathway)
             gene_pathway_yes_num <- length(gene_pathway_yes)
-            a <- matrix(c(gene_pathway_yes_num, gene_rec_num - gene_pathway_yes_num, gene_pathway_num -
-                gene_pathway_yes_num, gene_all_num - gene_rec_num + gene_pathway_yes_num - gene_pathway_num),
-                nrow = 2)
+            a <- matrix(c(gene_pathway_yes_num, gene_rec_num - gene_pathway_yes_num,
+                gene_pathway_num - gene_pathway_yes_num, gene_all_num - gene_rec_num +
+                  gene_pathway_yes_num - gene_pathway_num), nrow = 2)
             pvalue <- stats::fisher.test(a)
             pvalue <- as.double(pvalue$p.value)
             rec_pathway_gene[[j]] <- gene_pathway_yes
@@ -604,8 +614,8 @@ setMethod("get_lr_path", signature("SpaTalk"), function(object, celltype_sender,
     rec_pathway_all <- rec_pathway_all[which(rec_pathway_yes == "YES")]
     rec_pathway_pvalue <- rec_pathway_pvalue[which(rec_pathway_yes == "YES")]
     rec_pathway_res <- data.frame(celltype_sender = celltype_sender, celltype_receiver = celltype_receiver,
-        ligand = ligand, receptor = receptor, receptor_pathways = rec_pathway_all, pvalue = rec_pathway_pvalue,
-        gene_count = 0, stringsAsFactors = FALSE)
+        ligand = ligand, receptor = receptor, receptor_pathways = rec_pathway_all,
+        pvalue = rec_pathway_pvalue, gene_count = 0, stringsAsFactors = FALSE)
     rec_pathway_res$gene <- "NA"
     rec_pathway_gene_yes <- which(rec_pathway_yes == "YES")
     for (i in 1:length(rec_pathway_gene_yes)) {
@@ -621,4 +631,4 @@ setMethod("get_lr_path", signature("SpaTalk"), function(object, celltype_sender,
         rec_pathway_res$gene[i] <- genename1
     }
     return(list(tf_path = tf_path_all, path_pvalue = rec_pathway_res))
-})
+}

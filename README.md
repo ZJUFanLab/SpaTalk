@@ -44,8 +44,8 @@ dec_cci(object, celltype_sender, celltype_receiver)
 SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://tcm.zju.edu.cn/celltalkdb/), pathways from [`KEGG`](https://www.kegg.jp/kegg/pathway.html) and [`Reactome`](https://reactome.org/), and transcrptional factors (TFs) from [`AnimalTFDB`](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) by default. In the current version:
 
 - __SpaTalk can be applied to either [single-cell (vignette)]() or [spot-based (vignette)]() ST data__
-- __SpaTalk allows to use custom [LRIs, pathways, and TFs database (vignette)]()__
-- __SpaTalk can visualize [cell-type compositions (vignette)]() and [cell-cell communications (vignette)]()__
+- __SpaTalk allows to use custom [LRIs](), [pathways, and TFs database (vignette)]()__
+- __SpaTalk can visualize [cell-type compositions (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/SpaTalk-functions#visulization-cell-types) and [cell-cell communications (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/SpaTalk-functions#visulization-cell-cell-communications)__
 - LRIs and pathways can be download at[`data/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/data) 
 - Demo data can be download at[`inst/extdata/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/inst/extdata)
 
