@@ -1,5 +1,5 @@
 ---
-title: "SpaTalk tutorial (spot-based ST data)"
+title: "SpaTalk tutorial (single-cell ST data)"
 author: "Xin Shao"
 date: "`r Sys.Date()`"
 output:
@@ -7,7 +7,7 @@ output:
     theme: cayman
     highlight: github
 vignette: >
-  %\VignetteIndexEntry{SpaTalk tutorial (spot-based ST data)}
+  %\VignetteIndexEntry{SpaTalk tutorial (single-cell ST data)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -46,23 +46,23 @@ obj <- dec_celltype(object = obj,
 
 ### Use `plot_st_celltype_percent()` to view cell-type percent
 
-```{r plot_st_celltype_percent, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_celltype_percent, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell-type percent across spatial cells
-plot_st_celltype_percent(object = obj, celltype = 'eL2_3',size = 3)
+plot_st_celltype_percent(object = obj, celltype = 'Oligo',size = 2)
 
 ```
 
 ### Use `plot_st_gene()` to view gene expression
 
-```{r plot_st_gene, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_gene, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot marker gene expression across spatial cells
-plot_st_gene(object = obj, gene = 'Lamp5',size = 3, if_use_newmeta = F)
+plot_st_gene(object = obj, gene = 'Plp1',size = 2, if_use_newmeta = F)
 
 ```
 
 ### Use `plot_st_cor_heatmap()` to view correlation heatmap
 
-```{r plot_st_cor_heatmap, fig.width=7, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_cor_heatmap, fig.width=4, fig.height=3, fig.align='center', echo=TRUE}
 # correlation between marker gene expression and cell type percent across spatial cells
 plot_st_cor_heatmap(object = obj,
                     marker_genes = c("Plp1","Vip","Sst","Lamp5","Pcp4","Mfge8","Pvalb"),
@@ -76,32 +76,32 @@ plot_st_cor_heatmap(object = obj,
 ## **ST at single-cell resolution**
 ### Use `plot_st_celltype()` to view cell type in space
 
-```{r plot_st_celltype, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_celltype, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell type in reconstructed ST atlas
-plot_st_celltype(object = obj, celltype = 'eL2_3')
+plot_st_celltype(object = obj, celltype = 'Oligo', size = 2)
 
 ```
 
 ### Use `plot_st_gene()` to view gene expression in space
 
-```{r plot_st_gene2, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_gene2, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot marker gene expression in single-cell ST data
-plot_st_gene(object = obj,gene = 'Lamp5', if_use_newmeta = T)
+plot_st_gene(object = obj,gene = 'Plp1', if_use_newmeta = T, size = 2)
 
 ```
 
 ### Use `plot_st_celltype_density()` to view cell-type density in space
 
-```{r plot_st_celltype_density, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_celltype_density, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell-type density in single-cell ST data
 plot_st_celltype_density(object = obj,
-                         celltype = 'eL2_3',
+                         celltype = 'Oligo',
                          type = 'raster',
                          color_low = 'purple',
                          color_high = 'yellow')
 
 plot_st_celltype_density(object = obj,
-                         celltype = 'eL2_3',
+                         celltype = 'Oligo',
                          type = 'contour',
                          color_low = 'purple',
                          color_high = 'yellow')
@@ -109,9 +109,9 @@ plot_st_celltype_density(object = obj,
 
 ### Use `plot_st_celltype_all()` to view all cell types in space
 
-```{r plot_st_celltype_all, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_st_celltype_all, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot all cell types in single-cell ST data
-plot_st_celltype_all(object = obj,size = 2)
+plot_st_celltype_all(object = obj, size = 2)
 
 ```
 
@@ -143,7 +143,11 @@ obj_lr_path$path_pvalue
 
 ```{r plot_ccdist, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
 # Point plot with spatial distribution of celltype_sender and celltype_receiver
-plot_ccdist(object = obj, celltype_sender = 'eL5', celltype_receiver = 'Astro')
+plot_ccdist(object = obj,
+            celltype_sender = 'eL5',
+            celltype_receiver = 'Astro',            
+            size = 2,
+            arrow_length = 0.1)
 
 ```
 
@@ -157,14 +161,16 @@ plot_cci_lrpairs(object = obj, celltype_sender = 'eL5', celltype_receiver = 'Ast
 
 ### Use `plot_lrpair()` to view the specific LRI
 
-```{r plot_lrpair, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
+```{r plot_lrpair, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # Point plot with LR pair from celltype_sender to celltype_receiver
 plot_lrpair(object = obj,
             celltype_sender = 'eL5',
             ligand = 'Cort',
             celltype_receiver = 'Astro',
             receptor = 'Sstr2',
-            if_plot_density = F)
+            if_plot_density = F,
+            size = 2,
+            arrow_length = 0.1)
 
 ```
 
@@ -196,7 +202,6 @@ plot_lr_path(object = obj,
 
 ```{r plot_path2gene, fig.width=8, fig.height=6, fig.align='center', echo=TRUE}
 # River plot of significantly activated pathways and related downstream genes of receptors
-library(ggalluvial)
 plot_path2gene(object = obj,                
                celltype_sender = 'eL5',
                ligand = 'Cort',
@@ -210,7 +215,7 @@ plot_path2gene(object = obj,
 To infer all paired cell-cell communications, use `dec_cci_all()` instead of `dec_cci()`
 
 ```{r dec_cci_all, echo=TRUE}
-# Infer cell-cell communications from SST to PVALB neurons
+# Infer all cell-cell communications
 # obj <- dec_cci_all(object = obj)
 ```
 

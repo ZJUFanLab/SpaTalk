@@ -37,8 +37,6 @@ plot_st_cor_heatmap(
 \item{top_direction}{Direction to identify the highest value, select \code{'row'} or \code{'column'}.}
 
 \item{border_color}{Color of the cell border. Default is \code{'NA'}.}
-
-\item{if_use_newmeta}{Whether to use newmeta o plot the spatial distribution of gene after \code{\link{dec_celltype}} for spot-based data. Default is \code{FALSE}.}
 }
 \description{
 Plot heatpmap of correlation between the expression of marker genes and the predicted score of cell types among all spatial cells or spots.

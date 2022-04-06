@@ -30,7 +30,6 @@ Imports:
     pheatmap,
     corrplot,
     circlize,
-    ggalluvial,
     ggraph,
     ggrepel,
     igraph

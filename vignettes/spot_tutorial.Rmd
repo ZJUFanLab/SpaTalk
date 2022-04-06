@@ -46,7 +46,7 @@ obj <- createSpaTalk(st_data = as.matrix(st_data),
 
 ### Use `plot_st_pie_generate()` to view the cell-type composition
 
-```{r plot_st_pie_generate, echo=TRUE}
+```{r plot_st_pie_generate, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 plot_st_pie_generate(st_meta = st_meta, pie_scale = 1.3, xy_ratio = 1.8)
 
 ```
@@ -65,7 +65,7 @@ obj <- dec_celltype(object = obj,
 
 ### Use `plot_st_pie()` to view predicted cell-type composition
 
-```{r plot_st_pie, echo=TRUE}
+```{r plot_st_pie, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # Scatter pie plot for each spot
 plot_st_pie(object = obj, pie_scale = 1.3, xy_ratio = 1.8)
 
@@ -73,23 +73,23 @@ plot_st_pie(object = obj, pie_scale = 1.3, xy_ratio = 1.8)
 
 ### Use `plot_st_celltype_percent()` to view cell-type percent
 
-```{r plot_st_celltype_percent, echo=TRUE}
+```{r plot_st_celltype_percent, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell-type percent across spatial spots
-plot_st_celltype_percent(object = obj, celltype = 'Oligo',size = 3)
+plot_st_celltype_percent(object = obj, celltype = 'Oligo',size = 4)
 
 ```
 
 ### Use `plot_st_gene()` to view gene expression
 
-```{r plot_st_gene, echo=TRUE}
+```{r plot_st_gene, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot marker gene expression across spatial spots
-plot_st_gene(object = obj, gene = 'Plp1',size = 3, if_use_newmeta = F)
+plot_st_gene(object = obj, gene = 'Plp1',size = 4, if_use_newmeta = F)
 
 ```
 
 ### Use `plot_st_cor_heatmap()` to view correlation heatmap
 
-```{r plot_st_cor_heatmap, echo=TRUE}
+```{r plot_st_cor_heatmap, fig.width=4, fig.height=3, fig.align='center', echo=TRUE}
 # correlation between marker gene expression and cell type percent across spatial spots
 plot_st_cor_heatmap(object = obj,
                     marker_genes = c("Plp1","Vip","Sst","Lamp5","Pcp4","Mfge8","Pvalb"),
@@ -103,23 +103,23 @@ plot_st_cor_heatmap(object = obj,
 ## **ST at single-cell resolution**
 ### Use `plot_st_celltype()` to view cell type in space
 
-```{r plot_st_celltype, echo=TRUE}
+```{r plot_st_celltype, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell type in reconstructed ST atlas
-plot_st_celltype(object = obj, celltype = 'Oligo')
+plot_st_celltype(object = obj, celltype = 'Oligo', size = 2)
 
 ```
 
 ### Use `plot_st_gene()` to view gene expression in space
 
-```{r plot_st_gene2, echo=TRUE}
+```{r plot_st_gene2, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot marker gene expression in reconstructed ST atlas
-plot_st_gene(object = obj,gene = 'Plp1', if_use_newmeta = T)
+plot_st_gene(object = obj,gene = 'Plp1', if_use_newmeta = T, size = 2)
 
 ```
 
 ### Use `plot_st_celltype_density()` to view cell-type density in space
 
-```{r plot_st_celltype_density, echo=TRUE}
+```{r plot_st_celltype_density, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot cell-type density in reconstructed ST atlas
 plot_st_celltype_density(object = obj,
                          celltype = 'Oligo',
@@ -136,9 +136,9 @@ plot_st_celltype_density(object = obj,
 
 ### Use `plot_st_celltype_all()` to view all cell types in space
 
-```{r plot_st_celltype_all, echo=TRUE}
+```{r plot_st_celltype_all, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # plot all cell types in reconstructed ST atlas
-plot_st_celltype_all(object = obj)
+plot_st_celltype_all(object = obj, size = 2)
 
 ```
 
@@ -167,9 +167,13 @@ obj_lr_path$path_pvalue
 
 ### Use `plot_ccdist()` to view distribution of senders and receivers
 
-```{r plot_ccdist, echo=TRUE}
+```{r plot_ccdist, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
 # Point plot with spatial distribution of celltype_sender and celltype_receiver
-plot_ccdist(object = obj, celltype_sender = 'SST', celltype_receiver = 'PVALB')
+plot_ccdist(object = obj, 
+            celltype_sender = 'SST', 
+            celltype_receiver = 'PVALB',            
+            size = 2,
+            arrow_length = 0.1)
 
 ```
 
@@ -185,20 +189,22 @@ Given the limited LR pairs, we do not show the result here
 
 ### Use `plot_lrpair()` to view the specific LRI
 
-```{r plot_lrpair, echo=TRUE}
+```{r plot_lrpair, fig.width=5, fig.height=6, fig.align='center', echo=TRUE}
 # Point plot with LR pair from celltype_sender to celltype_receiver
 plot_lrpair(object = obj,
             celltype_sender = 'SST',
             ligand = 'Sst',
             celltype_receiver = 'PVALB',
             receptor = 'Sstr2',
-            if_plot_density = F)
+            if_plot_density = F,            
+            size = 2,
+            arrow_length = 0.1)
 
 ```
 
 ### Use `plot_lrpair_vln()` to view violin plot with spatial distance of LRI
 
-```{r plot_lrpair_vln, echo=TRUE}
+```{r plot_lrpair_vln, fig.width=8, fig.height=6, fig.align='center', echo=TRUE}
 # Violin plot with spatial distance of LR pair between senders and receivers and between all cell-cell pairs
 plot_lrpair_vln(object = obj,
                 celltype_sender = 'SST',
@@ -210,7 +216,7 @@ plot_lrpair_vln(object = obj,
 
 ### Use `plot_lr_path()` to view network with LR and downstream pathways
 
-```{r plot_lr_path, echo=TRUE}
+```{r plot_lr_path, fig.width=6, fig.height=6, fig.align='center', echo=TRUE}
 # Plot network with LR and downstream pathways
 plot_lr_path(object = obj,                
              celltype_sender = 'SST',
@@ -222,7 +228,7 @@ plot_lr_path(object = obj,
 
 ### Use `plot_path2gene()` to view river plot of significantly activated pathways
 
-```{r plot_path2gene, echo=TRUE}
+```{r plot_path2gene, fig.width=8, fig.height=6, fig.align='center', echo=TRUE}
 # River plot of significantly activated pathways and related downstream genes of receptors
 plot_path2gene(object = obj,                
                celltype_sender = 'SST',
@@ -237,7 +243,7 @@ plot_path2gene(object = obj,
 To infer all paired cell-cell communications, use `dec_cci_all()` instead of `dec_cci()`
 
 ```{r dec_cci_all, echo=TRUE}
-# Infer cell-cell communications from SST to PVALB neurons
+# Infer all cell-cell communications
 # obj <- dec_cci_all(object = obj)
 ```
 

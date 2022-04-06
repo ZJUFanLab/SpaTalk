@@ -338,7 +338,6 @@ plot_st_celltype_all <- function(object, size = 1, color = NULL) {
 #' @param color_low Color for the lowest value.
 #' @param color_mid Color for the middle value for using \code{scale_color_gradient2}. Default is \code{NULL}.
 #' @param color_high Color for the highest value.
-#' @param if_use_newmeta Whether to use newmeta o plot the spatial distribution of gene after \code{\link{dec_celltype}} for spot-based data. Default is \code{FALSE}.
 #' @param scale Character indicating if the values should be centered and scaled in either the row direction or the column direction, or none. Corresponding values are 'row', 'column' and 'none'.
 #' @param if_show_top Whether to plot a symbol to the highest value across rows or columns. Default is \code{TRUE}.
 #' @param top_direction Direction to identify the highest value, select \code{'row'} or \code{'column'}.

@@ -130,9 +130,9 @@ demo_pathways <- function() {
     dest <- c("CDK2", "CDK4", "TP53", "Atf2")
     pathway <- c("p53 signaling pathway", "p53 signaling pathway", "p53 signaling pathway",
         "PI3K-Akt signaling pathway")
-    sourcename <- c("Process(activation)", "Process(activation)", "Process(binding)",
+    type <- c("Process(activation)", "Process(activation)", "Process(binding)",
         "Process(association)")
-    type <- rep("KEGG", 4)
+    sourcename <- rep("KEGG", 4)
     src_tf <- c("NO", "NO", "NO", "NO")
     dest_tf <- c("NO", "NO", "YES", "YES")
     species <- c("Human", "Human", "Human", "Mouse")
