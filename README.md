@@ -45,7 +45,7 @@ SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://
 
 - __SpaTalk can be applied to either [single-cell (vignette)](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/sc_tutorial.html) or [spot-based (vignette)](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/spot_tutorial.html) ST data__
 - __SpaTalk allows to use custom [LRIs(wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-lrpairs), [pathways, and TFs database (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-pathways)__
-- __SpaTalk can visualize [cell-type compositions (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/SpaTalk-functions#visulization-cell-types) and [cell-cell communications (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/SpaTalk-functions#visulization-cell-cell-communications)__
+- __SpaTalk can visualize [cell-type compositions (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki#visulization-cell-types) and [cell-cell communications (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki#visulization-cell-cell-communications)__
 - LRIs and pathways can be download at[`data/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/data) 
 - Demo data can be download at[`inst/extdata/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/inst/extdata)
 
