@@ -139,7 +139,7 @@ a.sourceLine {
 <section class="main-content">
 <div id="main" class="section level2">
 <h2><strong>Main</strong></h2>
-<p>After pre-processing, we create a SpaTalk object with st_data and st_meta for spot-based ST data. In practise, we generate simulated spot-based ST from single-cell STARmap data using <code>generate_spot()</code></p>
+<p>After pre-processing, we create a SpaTalk object with st_data and st_meta for spot-based ST data. In practise, we generate simulated spot-based ST from single-cell STARmap data using <code>generate_spot()</code>. For Slide-seq (10um) close to single-cell resolution, we recommend <code>spot_max_cell</code> as 1. For 10X Visum (55um), we recommend <code>spot_max_cell</code> as 30 as stated in the recent <a href="https://pubmed.ncbi.nlm.nih.gov/34145435/">review<a>. </p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SpaTalk)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load starmap data</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">paste0</span>(<span class="fu">system.file</span>(<span class="at">package =</span> <span class="st">&#39;SpaTalk&#39;</span>), <span class="st">&quot;/extdata/starmap_data.rda&quot;</span>))</span>
