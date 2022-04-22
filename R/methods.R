@@ -391,6 +391,7 @@ dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
         per_num, pvalue)
     ### [2] Downstream targets and TFs
     max_hop <- object@para$max_hop
+    receptor_tf <- NULL
     if (nrow(lrdb) > 0) {
         receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb, ggi_tf,
             cell_pair, st_data, max_hop, co_exp_ratio)
@@ -480,6 +481,7 @@ dec_cci_all <- function(object, n_neighbor = 10, min_pairs = 5, min_pairs_ratio 
                   per_num, pvalue)
                 ### [2] Downstream targets and TFs
                 max_hop <- object@para$max_hop
+                receptor_tf <- NULL
                 if (nrow(lrdb) > 0) {
                   receptor_tf <- .get_tf_res(celltype_sender, celltype_receiver, lrdb,
                     ggi_tf, cell_pair, st_data, max_hop, co_exp_ratio)
