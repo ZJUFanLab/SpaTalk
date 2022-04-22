@@ -980,11 +980,13 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
     # pathway
     ggi_pathway <- object@lr_path$pathways
     rec_pathway_all <- ggi_pathway[ggi_pathway$src == receptor | ggi_pathway$dest == receptor, ]
+    if (nrow(rec_pathway_all) == 0) {
+        stop("No significantly activated pathways found for this LRI")
+    }
     rec_pathway_all <- unique(rec_pathway_all$pathway)
     rec_pathway_yes <- rep("NO", length(rec_pathway_all))
     rec_pathway_gene <- list()
-    rec_pathway_pvalue <- list()
-    rec_pathway_pvalue <- as.double(rec_pathway_pvalue)
+    rec_pathway_pvalue <- as.double(rep(1, length(rec_pathway_all)))
     gene_rec <- unique(c(ligand, receptor, tf_path_all$src, tf_path_all$dest))
     gene_rec_num <- length(gene_rec)
     gene_all <- rownames(st_data)
@@ -1007,15 +1009,16 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
             rec_pathway_yes[j] <- "YES"
         }
     }
-    rec_pathway_all <- rec_pathway_all[which(rec_pathway_yes == "YES")]
     gene2pathway_plot <- NULL
     for (j in 1:length(rec_pathway_all)) {
-        if (rec_pathway_pvalue[j] < pvalue) {
+        if (rec_pathway_yes[j] == "YES" & rec_pathway_pvalue[j] < pvalue) {
             gene2pathway_plot_temp <- data.frame(pathway = rec_pathway_all[j], gene = rec_pathway_gene[[j]],
                 stringsAsFactors = FALSE)
             gene2pathway_plot <- rbind(gene2pathway_plot, gene2pathway_plot_temp)
-            rec_pathway_yes[j] <- "YES"
         }
+    }
+    if (is.null(gene2pathway_plot)) {
+        stop("No significantly activated pathways found for this LRI")
     }
     gene2pathway_plot$num <- 1
     d1 <- gene2pathway_plot[, c("gene", "num")]
