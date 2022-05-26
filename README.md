@@ -36,6 +36,10 @@ dec_celltype(object, sc_data, sc_celltype)
 # celltype_receiver
 
 dec_cci(object, celltype_sender, celltype_receiver)
+
+# OR
+dec_cci_all(object)
+
 ```
 
 # Note
