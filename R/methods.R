@@ -281,7 +281,7 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         st_coef <- .run_stereoscope(st_data, sc_data, sc_celltype, env, anaconda_path)
     }
     if (method == 7 & is.null(dec_result)) {
-        cat(crayon::cyan("Using cell2location to deconvolute, please install the stereoscope (python package) first!", "\n"))
+        cat(crayon::cyan("Using cell2location to deconvolute, please install the cell2location (python package) first!", "\n"))
         # python
         require(anndata)
         require(Seurat)
