@@ -38,8 +38,8 @@ dec_celltype(object, sc_data, sc_celltype)
 dec_cci(object, celltype_sender, celltype_receiver)
 
 # OR
-dec_cci_all(object)
 
+dec_cci_all(object)
 ```
 
 # Note
