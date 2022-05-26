@@ -14,6 +14,7 @@ plot_lrpair(
   size = 1,
   if_plot_density = T,
   if_plot_edge = T,
+  if_show_arrow = T,
   arrow_length = 0.05,
   plot_cells = NULL
 )
@@ -36,6 +37,8 @@ plot_lrpair(
 \item{if_plot_density}{Whether to plot marginal density plots. Default is \code{TRUE}.}
 
 \item{if_plot_edge}{Whether to plot edge between neighbors. Default is \code{TRUE}.}
+
+\item{if_show_arrow}{Whether to show the arrow of the plotted edge. Default is \code{TRUE}.}
 
 \item{arrow_length}{Arrow length.}
 

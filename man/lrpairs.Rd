@@ -5,7 +5,7 @@
 \alias{lrpairs}
 \title{lrpairs}
 \format{
-An object of class \code{data.frame} with 5431 rows and 3 columns.
+An object of class \code{data.frame} with 5427 rows and 3 columns.
 }
 \source{
 \url{http://tcm.zju.edu.cn/celltalkdb/}

@@ -140,3 +140,19 @@ demo_pathways <- function() {
         type = type, src_tf = src_tf, dest_tf = dest_tf, species = species, stringsAsFactors = F)
     return(pathways_demo)
 }
+
+#' @title Demo data of dec_result
+#'
+#' @description Demo data of dec_result
+#' @details \code{dec_result} used in \code{\link{dec_celltype}} must be a \code{matrix} object, each row representing a spot, each column representing a cell type.
+#' @return A matrix.
+#' @export
+#' @examples dec_result_demo <- demo_dec_result()
+
+demo_dec_result <- function(){
+    res_weight <- sample(1:100, 18, F)/100
+    dec_result_demo <- matrix(res_weight,nrow = 3,ncol = 6)
+    colnames(dec_result_demo) <- c("B", "T", "NK", "Monocyte", "Neutrophil", "DC")
+    rownames(dec_result_demo) <- paste0("spot", 1:3)
+    return(dec_result_demo)
+}

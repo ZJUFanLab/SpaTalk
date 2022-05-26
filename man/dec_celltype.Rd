@@ -12,14 +12,19 @@ dec_celltype(
   min_nFeatures = 10,
   if_use_normalize_data = T,
   if_use_hvg = F,
-  if_use_all_cores = T,
-  iter_num = 1000
+  if_doParallel = T,
+  use_n_cores = NULL,
+  iter_num = 1000,
+  method = 1,
+  env = "base",
+  anaconda_path = "~/anaconda3",
+  dec_result = NULL
 )
 }
 \arguments{
 \item{object}{SpaTalk object generated from \code{\link{createSpaTalk}}.}
 
-\item{sc_data}{A matrix containing counts of single-cell RNA-seq data as the reference, each column representing a cell, each row representing a gene.}
+\item{sc_data}{A A data.frame or matrix or dgCMatrix containing counts of single-cell RNA-seq data as the reference, each column representing a cell, each row representing a gene.}
 
 \item{sc_celltype}{A character containing the cell type of the reference single-cell RNA-seq data.}
 
@@ -31,9 +36,19 @@ dec_celltype(
 
 \item{if_use_hvg}{Whether to use highly variable genes for non-negative regression. Default is \code{FALSE}.}
 
-\item{if_use_all_cores}{Whether to use all CPU cores. Default is \code{TRUE}.}
+\item{if_doParallel}{Use doParallel. Default is TRUE.}
 
-\item{iter_num}{Number of iteration to genenrate the single-cell data for spot-based data. Default is \code{1000}.}
+\item{use_n_cores}{Number of CPU cores to use. Default is all cores - 2.}
+
+\item{iter_num}{Number of iteration to generate the single-cell data for spot-based data. Default is \code{1000}.}
+
+\item{method}{1 means using the SpaTalk deconvolution method, 2 means using RCTD, 3 means using Seurat, 4 means using SPOTlight, 5 means using deconvSeq, 6 means using stereoscope, 7 means using cell2location}
+
+\item{env}{When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended.}
+
+\item{anaconda_path}{When use python package, please define the path to anaconda, default is ~/anaconda3}
+
+\item{dec_result}{A matrix of deconvolution result from other upcoming methods, row represents spots or cells, column represents cell types of scRNA-seq reference. See \code{\link{demo_dec_result}}}
 }
 \value{
 SpaTalk object containing the decomposing results.

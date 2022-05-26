@@ -7,7 +7,7 @@
 generate_spot(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y_max)
 }
 \arguments{
-\item{st_data}{A matrix containing counts of spatial transcriptomics, each column representing a cell, each row representing a gene.}
+\item{st_data}{A data.frame or matrix or dgCMatrix containing counts of spatial transcriptomics, each column representing a cell, each row representing a gene.}
 
 \item{st_meta}{A data.frame containing coordinate of spatial transcriptomics with three columns, \code{'cell'}, \code{'x'}, \code{'y'}, and \code{celltype}.}
 

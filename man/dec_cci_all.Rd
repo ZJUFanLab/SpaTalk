@@ -11,7 +11,9 @@ dec_cci_all(
   min_pairs_ratio = 0,
   per_num = 1000,
   pvalue = 0.05,
-  co_exp_ratio = 0.1
+  co_exp_ratio = 0.1,
+  if_doParallel = T,
+  use_n_cores = NULL
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ dec_cci_all(
 \item{pvalue}{Include the significantly proximal LR pairs with this cutoff of p value from permutation test. Default is \code{0.05}.}
 
 \item{co_exp_ratio}{Min cell ratio in receiving cells with co-expressed source and target genes for predicting the downstream pathway activity.}
+
+\item{if_doParallel}{Use doParallel. Default is TRUE.}
+
+\item{use_n_cores}{Number of CPU cores to use. Default is all cores - 2.}
 }
 \value{
 SpaTalk object containing the inferred LR pairs and pathways.

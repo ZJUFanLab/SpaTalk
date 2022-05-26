@@ -4,7 +4,14 @@
 \alias{find_lr_path}
 \title{Find lrpairs and pathways}
 \usage{
-find_lr_path(object, lrpairs, pathways, max_hop = NULL)
+find_lr_path(
+  object,
+  lrpairs,
+  pathways,
+  max_hop = NULL,
+  if_doParallel = T,
+  use_n_cores = NULL
+)
 }
 \arguments{
 \item{object}{SpaTalk object generated from \code{\link{dec_celltype}}.}
@@ -14,6 +21,10 @@ find_lr_path(object, lrpairs, pathways, max_hop = NULL)
 \item{pathways}{A data.frame of the system data containing gene-gene interactions and pathways from KEGG and Reactome as well as the information of transcriptional factors.}
 
 \item{max_hop}{Max hop from the receptor to the downstream target transcriptional factor to find for receiving cells. Default is \code{3} for human and \code{4} for mouse.}
+
+\item{if_doParallel}{Use doParallel. Default is TRUE.}
+
+\item{use_n_cores}{Number of CPU cores to use. Default is all cores - 2.}
 }
 \value{
 SpaTalk object containing the filtered lrpairs and pathways.

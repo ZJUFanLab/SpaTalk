@@ -451,6 +451,7 @@ plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NUL
 #' @param if_plot_others Whether to plot others. Default is \code{TRUE}.
 #' @param if_plot_density Whether to plot marginal density plots. Default is \code{TRUE}.
 #' @param if_plot_edge Whether to plot edge between neighbors. Default is \code{TRUE}.
+#' @param if_show_arrow Whether to show the arrow of the plotted edge. Default is \code{TRUE}.
 #' @param arrow_length Arrow length.
 #' @param plot_cells Which cells to plot. Default is all cells. Input a character vector of cell names to plot.
 #' @import ggExtra ggplot2
@@ -459,7 +460,7 @@ plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NUL
 #' @export
 
 plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL, size = 1, if_plot_others = T,
-    if_plot_density = T, if_plot_edge = T, arrow_length = 0.05, plot_cells = NULL) {
+    if_plot_density = T, if_plot_edge = T, if_show_arrow =T, arrow_length = 0.05, plot_cells = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -491,8 +492,7 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
-        ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
     cell_pair$x2 <- 0
@@ -511,19 +511,16 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     st_meta[st_meta$celltype == celltype_sender, ]$celltype <- paste0("Sender: ", celltype_sender)
     st_meta[st_meta$celltype == celltype_receiver, ]$celltype <- paste0("Receiver: ", celltype_receiver)
     if (if_plot_others) {
-        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ",
-            celltype_receiver), "Others"))
+        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ", celltype_receiver), "Others"))
     } else {
         st_meta <- st_meta[st_meta$celltype != "Others", ]
-        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ",
-            celltype_receiver)))
+        st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ", celltype_receiver)))
     }
     if (is.null(color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         if (if_plot_others) {
-            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
-                "grey80")
+            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
         } else {
             color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)])
         }
@@ -531,8 +528,11 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x, y, color = celltype),
         size = size) + ggplot2::scale_color_manual(values = color) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
     if (if_plot_edge) {
-        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length,
-            "inches"), type = "closed"))
+        if (if_show_arrow) {
+            p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length, "inches"), type = "closed"))
+        } else {
+            p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2))
+        }
     }
     if (if_plot_density) {
         ggExtra::ggMarginal(p = p, type = "density", groupFill = T)
@@ -587,8 +587,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     heat_col <- (grDevices::colorRampPalette(c("white", color)))(2)
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
-        ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     # get result from dec_cci
     lrpair <- object@lrpair
     lrpair <- lrpair[lrpair$celltype_sender == celltype_sender & lrpair$celltype_receiver == celltype_receiver,
@@ -606,7 +605,6 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0, value.var = "score")
     rownames(lrpair_mat) <- lrpair_mat$ligand
     lrpair_mat <- lrpair_mat[, -1]
-    #
     lrpair_mat <- lrpair_mat[ligand, receptor]
     if (!is.data.frame(lrpair_mat)) {
         stop("Limited number of ligand-receptor interactions!")
@@ -633,6 +631,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
 #' @param size Point size. Default is \code{1}.
 #' @param if_plot_density Whether to plot marginal density plots. Default is \code{TRUE}.
 #' @param if_plot_edge Whether to plot edge between neighbors. Default is \code{TRUE}.
+#' @param if_show_arrow Whether to show the arrow of the plotted edge. Default is \code{TRUE}.
 #' @param arrow_length Arrow length.
 #' @param plot_cells Which cells to plot. Default is all cells. Input a character vector of cell names to plot.
 #' @import ggExtra ggplot2
@@ -641,7 +640,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
 #' @export
 
 plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, receptor, color = NULL, size = 1,
-    if_plot_density = T, if_plot_edge = T, arrow_length = 0.05, plot_cells = NULL) {
+    if_plot_density = T, if_plot_edge = T, if_show_arrow =T, arrow_length = 0.05, plot_cells = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -682,13 +681,11 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     if (is.null(color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
-        color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
-            "grey80")
+        color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
-        ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
     cell_pair$x2 <- 0
@@ -715,13 +712,15 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     st_meta[st_meta$cell %in% st_meta_receptor$cell, ]$Expressed_genes <- celltype_receiver
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta_ligand$cell, ]
     cell_pair <- cell_pair[cell_pair$cell_receiver %in% st_meta_receptor$cell, ]
-    st_meta$Expressed_genes <- factor(st_meta$Expressed_genes, levels = c(celltype_sender, celltype_receiver,
-        "Others"))
+    st_meta$Expressed_genes <- factor(st_meta$Expressed_genes, levels = c(celltype_sender, celltype_receiver, "Others"))
     p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x, y, color = Expressed_genes),
         size = size) + ggplot2::scale_color_manual(values = color) + ggplot2::theme_bw() + ggplot2::theme(panel.grid = ggplot2::element_blank())
     if (if_plot_edge) {
-        p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length,
-            "inches"), type = "closed"))
+        if (if_show_arrow) {
+            p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2), arrow = arrow(length = unit(arrow_length, "inches"), type = "closed"))
+        } else {
+            p <- p + geom_segment(data = cell_pair, aes(x = x1, y = y1, xend = x2, yend = y2))
+        }
     }
     if (if_plot_density) {
         ggExtra::ggMarginal(p = p, type = "density", groupFill = T)
@@ -776,14 +775,12 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
     if (is.null(vln_color)) {
         cellname <- colnames(object@coef)
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
-        vln_color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)],
-            "grey80")
+        vln_color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
     }
     celltype_dist <- object@dist
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
-    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell,
-        ]
+    cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     # calculate L-R distance across expressed cell-cell pairs
     ndata_ligand <- st_data[ligand, ]
     ndata_receptor <- st_data[receptor, ]
@@ -804,11 +801,9 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
         print(stats::wilcox.test(celltype_dist1, celltype_dist2, alternative = "greater"))
     }
     d1 <- data.frame(celltype = "All cell-cell pairs", dist = celltype_dist1, stringsAsFactors = F)
-    d2 <- data.frame(celltype = paste0(celltype_sender, "-", celltype_receiver, " pairs"), dist = celltype_dist2,
-        stringsAsFactors = F)
+    d2 <- data.frame(celltype = paste0(celltype_sender, "-", celltype_receiver, " pairs"), dist = celltype_dist2, stringsAsFactors = F)
     lr_dist_plot <- rbind(d1, d2)
-    p <- ggplot(data = lr_dist_plot, aes(x = celltype, y = dist, fill = celltype)) + geom_violin(trim = T) +
-        scale_fill_manual(values = vln_color)
+    p <- ggplot(data = lr_dist_plot, aes(x = celltype, y = dist, fill = celltype)) + geom_violin(trim = T) + scale_fill_manual(values = vln_color)
     if (if_plot_boxplot) {
         p + geom_boxplot(width = box_width, outlier.shape = NA)
     }
@@ -926,8 +921,7 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     receptor_xy <- receptor_xy[order(receptor_xy$x), ]
     receptor_x <- receptor_xy$x[1]
     receptor_y <- receptor_xy$y[1]
-    tf_path_temp <- data.frame(src = ligand, src_x = ligand_x, src_y = ligand_y, dest = receptor, dest_x = receptor_x,
-        dest_y = receptor_y, stringsAsFactors = F)
+    tf_path_temp <- data.frame(src = ligand, src_x = ligand_x, src_y = ligand_y, dest = receptor, dest_x = receptor_x, dest_y = receptor_y, stringsAsFactors = F)
     tf_path_all <- rbind(tf_path_all, tf_path_temp)
     plot_node_new$tf <- "NO"
     plot_node_new[plot_node_new$gene %in% names(tf_gene_all), ]$tf <- "YES"
@@ -1000,8 +994,7 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
             gene_pathway_yes <- intersect(gene_rec, gene_pathway)
             gene_pathway_yes_num <- length(gene_pathway_yes)
             a <- matrix(c(gene_pathway_yes_num, gene_rec_num - gene_pathway_yes_num, gene_pathway_num -
-                gene_pathway_yes_num, gene_all_num - gene_rec_num + gene_pathway_yes_num - gene_pathway_num),
-                nrow = 2)
+                gene_pathway_yes_num, gene_all_num - gene_rec_num + gene_pathway_yes_num - gene_pathway_num), nrow = 2)
             fisher_pvalue <- fisher.test(a)
             fisher_pvalue <- as.double(fisher_pvalue$p.value)
             rec_pathway_gene[[j]] <- gene_pathway_yes
@@ -1012,8 +1005,7 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
     gene2pathway_plot <- NULL
     for (j in 1:length(rec_pathway_all)) {
         if (rec_pathway_yes[j] == "YES" & rec_pathway_pvalue[j] < pvalue) {
-            gene2pathway_plot_temp <- data.frame(pathway = rec_pathway_all[j], gene = rec_pathway_gene[[j]],
-                stringsAsFactors = FALSE)
+            gene2pathway_plot_temp <- data.frame(pathway = rec_pathway_all[j], gene = rec_pathway_gene[[j]], stringsAsFactors = FALSE)
             gene2pathway_plot <- rbind(gene2pathway_plot, gene2pathway_plot_temp)
         }
     }

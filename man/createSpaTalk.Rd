@@ -7,7 +7,7 @@
 createSpaTalk(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
 }
 \arguments{
-\item{st_data}{A matrix containing counts of spatial transcriptomics, each column representing a spot or a cell, each row representing a gene.}
+\item{st_data}{A data.frame or matrix or dgCMatrix containing counts of spatial transcriptomics, each column representing a spot or a cell, each row representing a gene.}
 
 \item{st_meta}{A data.frame containing coordinate of spatial transcriptomics with three columns, namely \code{'spot'}, \code{'x'}, \code{'y'} for spot-based spatial transcriptomics data or \code{'cell'}, \code{'x'}, \code{'y'} for single-cell spatial transcriptomics data.}
 
@@ -15,7 +15,7 @@ createSpaTalk(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
 
 \item{if_st_is_sc}{A logical meaning if it is single-cell spatial transcriptomics data. \code{TRUE} is \code{FALSE}.}
 
-\item{spot_max_cell}{A integer meaning max cell number for each plot to predict. If \code{if_st_sc} is \code{FALSE}, please determine the \code{spot_max_cell}.}
+\item{spot_max_cell}{A integer meaning max cell number for each plot to predict. If \code{if_st_sc} is \code{FALSE}, please determine the \code{spot_max_cell}. For 10X (55um), we recommend 30. For Slide-seq, we recommend 1.}
 }
 \value{
 SpaTalk object

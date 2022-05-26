@@ -1,7 +1,7 @@
 Package: SpaTalk
 Title: Infer Cell-Cell Communication for Spatial Transcriptomics
 Version: 1.0
-Depends: R (>= 4.0.0), ggalluvial
+Depends: R (>= 4.0.0), ggalluvial, doParallel
 Authors@R: 
     person("Xin", "Shao", , "xin_shao@zju.edu.cn", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1928-3878"))
@@ -32,7 +32,10 @@ Imports:
     circlize,
     ggraph,
     ggrepel,
-    igraph
+    igraph,
+    foreach,
+    parallel,
+    iterators
 Suggests: 
     rmarkdown,
     knitr,
