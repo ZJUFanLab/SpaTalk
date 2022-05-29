@@ -93,7 +93,12 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
     st_type <- object@para$st_type
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
+        st_data <- object@data
+        if ("rawndata" %in% names(st_data)) {
+            st_data <- object@data$rawndata
+        } else {
+            st_data <- object@data$rawdata
+        }
     }
     if (st_type == "spot") {
         if (if_use_newmeta) {
@@ -101,7 +106,12 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
             st_data <- object@data$newdata
         } else {
             st_meta <- object@meta$rawmeta
-            st_data <- object@data$rawndata
+            st_data <- object@data
+            if ("rawndata" %in% names(st_data)) {
+                st_data <- object@data$rawndata
+            } else {
+                st_data <- object@data$rawdata
+            }
         }
     }
     if (length(gene) > 1) {
@@ -112,7 +122,7 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
     }
     st_meta$gene <- as.numeric(st_data[gene, ])
     if (!is.null(celltype)) {
-        if (!celltype %in% colnames(object@coef)) {
+        if (!celltype %in% st_meta$celltype) {
             stop(paste0(celltype, " is not in st_meta!"))
         }
         if (if_use_newmeta) {
@@ -215,7 +225,11 @@ plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, 
         stop(paste0(celltype, " is not in the st_meta!"))
     }
     if (is.null(point_color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         point_color <- col_manual[which(cellname == celltype)]
     }
@@ -472,10 +486,10 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     } else {
         st_meta <- object@meta$newmeta
     }
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!is.null(plot_cells)) {
@@ -517,7 +531,11 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
         st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ", celltype_receiver)))
     }
     if (is.null(color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         if (if_plot_others) {
             color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
@@ -568,19 +586,28 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     st_type <- object@para$st_type
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
+        st_data <- object@data
+        if ("rawndata" %in% names(st_data)) {
+            st_data <- object@data$rawndata
+        } else {
+            st_data <- object@data$rawdata
+        }
     } else {
         st_meta <- object@meta$newmeta
         st_data <- object@data$newdata
     }
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (is.null(color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         color <- col_manual[which(cellname == celltype_receiver)]
     }
@@ -590,8 +617,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     # get result from dec_cci
     lrpair <- object@lrpair
-    lrpair <- lrpair[lrpair$celltype_sender == celltype_sender & lrpair$celltype_receiver == celltype_receiver,
-        ]
+    lrpair <- lrpair[lrpair$celltype_sender == celltype_sender & lrpair$celltype_receiver == celltype_receiver, ]
     lrpair <- lrpair[order(-lrpair$score), ]
     if (nrow(lrpair) > top_lrpairs) {
         lrpair <- lrpair[1:top_lrpairs, ]
@@ -649,15 +675,20 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     st_type <- object@para$st_type
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
+        st_data <- object@data
+        if ("rawndata" %in% names(st_data)) {
+            st_data <- object@data$rawndata
+        } else {
+            st_data <- object@data$rawdata
+        }
     } else {
         st_meta <- object@meta$newmeta
         st_data <- object@data$newdata
     }
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!ligand %in% rownames(st_data)) {
@@ -679,7 +710,11 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
         }
     }
     if (is.null(color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
     }
@@ -755,15 +790,20 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
     st_type <- object@para$st_type
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
+        st_data <- object@data
+        if ("rawndata" %in% names(st_data)) {
+          st_data <- object@data$rawndata
+        } else {
+          st_data <- object@data$rawdata
+        }
     } else {
         st_meta <- object@meta$newmeta
         st_data <- object@data$newdata
     }
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!ligand %in% rownames(st_data)) {
@@ -773,7 +813,11 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
         stop("Please provide the correct name of receptor!")
     }
     if (is.null(vln_color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         vln_color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
     }
@@ -834,10 +878,10 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
     st_data <- .get_st_data(object)
     st_meta <- .get_st_meta(object)
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!ligand %in% rownames(st_data)) {
@@ -891,7 +935,11 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     plot_node_new[plot_node_new$gene == ligand, ]$Celltype <- celltype_sender
     plot_node_new$Celltype <- factor(plot_node_new$Celltype, levels = c(celltype_sender, celltype_receiver))
     if (is.null(color)) {
-        cellname <- colnames(object@coef)
+        cellname <- unique(st_meta$celltype)
+        cellname <- cellname[order(cellname)]
+        if ("unsure" %in% cellname) {
+            cellname <- cellname[-which(cellname == "unsure")]
+        }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         col_manual <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)])
     } else {
@@ -959,10 +1007,10 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
     st_data <- .get_st_data(object)
     st_meta <- .get_st_meta(object)
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!ligand %in% rownames(st_data)) {
