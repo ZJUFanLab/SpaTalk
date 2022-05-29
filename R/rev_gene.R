@@ -1,12 +1,13 @@
 #' @title Pre-processing step: revising gene symbols
 #'
 #' @description Revise genes according to NCBI Gene symbols updated in June 30, 2021 for count matrix, user-custom lrpairs data.frame, and user-custom pathways data.frame.
-#' @param data A matrix containing count data each column representing a spot or a cell, each row representing a gene; Or a data.frame containing ligand-receptor pairs; Or a data.frame containing gene-gene interactions and pathways from KEGG and Reactome as well as the information of transcriptional factors.
+#' @param data A data.frame or matrix or dgCMatrix containing count data each column representing a spot or a cell, each row representing a gene; Or a data.frame containing ligand-receptor pairs; Or a data.frame containing gene-gene interactions and pathways from KEGG and Reactome as well as the information of transcriptional factors.
 #' @param data_type A character to define the type of \code{data}, select \code{'count'} for the data matrix, \code{'lrpairs'} for the data.frame containing lrpairs, \code{'pathways'} for the data.frame containing pathways.
 #' @param species Species of the data.\code{'Human'} or \code{'Mouse'}.
 #' @param geneinfo A data.frame of the system data containing gene symbols of \code{'Human'} and \code{'Mouse'} updated on June 30, 2021 for revising count matrix.
 #' @return A new matrix or data.frame.
 #' @importFrom crayon red cyan green
+#' @import Matrix
 #' @export
 
 rev_gene <- function(data = NULL, data_type = NULL, species = NULL, geneinfo = NULL) {
@@ -34,8 +35,14 @@ rev_gene <- function(data = NULL, data_type = NULL, species = NULL, geneinfo = N
     }
     # revise matrix
     if (data_type == "count") {
-        if (!is.matrix(data)) {
-            stop("data must be a matrix when data_type is 'count'!")
+        if (is(data, "data.frame")) {
+            data <- methods::as(as.matrix(data), "dgCMatrix")
+        }
+        if (is(data, "matrix")) {
+            data <- methods::as(data, "dgCMatrix")
+        }
+        if (!is(data, "dgCMatrix")) {
+            stop("st_data must be a data.frame or matrix or dgCMatrix!")
         }
         cat(crayon::cyan("Revising gene symbols for count data", "\n"))
         Sys.sleep(1)

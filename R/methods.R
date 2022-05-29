@@ -87,12 +87,13 @@ generate_spot <- function(st_data, st_meta, x_min, x_res, x_max, y_min, y_res, y
 #' @param species A character meaning species of the spatial transcriptomics data.\code{'Human'} or \code{'Mouse'}.
 #' @param if_st_is_sc A logical meaning if it is single-cell spatial transcriptomics data. \code{TRUE} is \code{FALSE}.
 #' @param spot_max_cell A integer meaning max cell number for each plot to predict. If \code{if_st_sc} is \code{FALSE}, please determine the \code{spot_max_cell}. For 10X (55um), we recommend 30. For Slide-seq, we recommend 1.
+#' @param celltype A character containing the cell type of ST data. To skip the deconvolution step and directly infer cell-cell communication, please define the cell type. Default is `NULL`.
 #' @return SpaTalk object
 #' @importFrom  methods as
 #' @import Matrix
 #' @export
 
-createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell) {
+createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell, celltype = NULL) {
     if (is(st_data, "data.frame")) {
         st_data <- methods::as(as.matrix(st_data), "dgCMatrix")
     }
@@ -135,6 +136,16 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell)
     st_meta$nFeatures <- as.numeric(apply(st_data, 2, .percent_cell))
     st_meta$label <- "-"
     st_meta$cell_num <- spot_max_cell
+    st_meta$celltype <- "unsure"
+    if (!is.null(celltype)) {
+        if (!is.character(celltype)) {
+            stop("celltype must be a character with length equal to ST data!")
+        }
+        if (length(celltype) != nrow(st_meta)) {
+            stop("Length of celltype must be equal to nrow(st_meta)!")
+        }
+        st_meta$celltype <- celltype
+    }
     # generate SpaTalk object
     object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
         para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell))
@@ -308,7 +319,6 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     coef_name <- coef_name[order(coef_name)]
     st_coef <- st_coef[ ,coef_name]
     object@coef <- st_coef
-    st_meta$celltype <- "unsure"
     st_meta <- cbind(st_meta, .coef_nor(st_coef))
     # dist
     st_dist <- .st_dist(st_meta)
