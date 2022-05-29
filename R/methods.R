@@ -146,9 +146,11 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
         }
         st_meta$celltype <- celltype
     }
+    # dist
+    st_dist <- .st_dist(st_meta)
     # generate SpaTalk object
     object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
-        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell))
+        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell), dist = st_dist)
     return(object)
 }
 
@@ -320,12 +322,10 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     st_coef <- st_coef[ ,coef_name]
     object@coef <- st_coef
     st_meta <- cbind(st_meta, .coef_nor(st_coef))
-    # dist
-    st_dist <- .st_dist(st_meta)
     if (st_type == "single-cell") {
         object@meta$rawmeta <- .determine_celltype(st_meta, min_percent)
-        object@dist <- st_dist
     } else {
+        st_dist <- object@dist
         if (if_doParallel) {
             newmeta <- .generate_newmeta_doParallel(st_meta, st_dist, min_percent, n_cores)
         } else {
