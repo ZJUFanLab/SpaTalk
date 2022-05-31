@@ -115,7 +115,7 @@
         readr::write_lines(res_sh,file = "res_sh.sh")
     } else {
         res_sh <- c("#!/bin/sh", paste0(anaconda_path,"/condabin/conda init"), paste0("source ", anaconda_path, "/etc/profile.d/conda.sh"), paste0("conda activate ", env))
-        res_sh <- c(res_sh, "stereoscope run --sc_cnt cnt_data.tsv --sc_labels mta_data.tsv -sce 100  -o res -n 5000 --st_cnt cnt_st.tsv -ste 100 --gpu -stb 100 -scb 100")
+        res_sh <- c(res_sh, "stereoscope run --sc_cnt cnt_data.tsv --sc_labels mta_data.tsv -sce 75000  -o res -n 5000 --st_cnt cnt_st.tsv -ste 75000 --gpu -stb 100 -scb 100")
         readr::write_lines(x = res_sh,file = "res_sh.sh")
     }
     system("bash res_sh.sh")
