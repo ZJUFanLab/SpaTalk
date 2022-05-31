@@ -7,7 +7,7 @@
 rev_gene(data = NULL, data_type = NULL, species = NULL, geneinfo = NULL)
 }
 \arguments{
-\item{data}{A matrix containing count data each column representing a spot or a cell, each row representing a gene; Or a data.frame containing ligand-receptor pairs; Or a data.frame containing gene-gene interactions and pathways from KEGG and Reactome as well as the information of transcriptional factors.}
+\item{data}{A data.frame or matrix or dgCMatrix containing count data each column representing a spot or a cell, each row representing a gene; Or a data.frame containing ligand-receptor pairs; Or a data.frame containing gene-gene interactions and pathways from KEGG and Reactome as well as the information of transcriptional factors.}
 
 \item{data_type}{A character to define the type of \code{data}, select \code{'count'} for the data matrix, \code{'lrpairs'} for the data.frame containing lrpairs, \code{'pathways'} for the data.frame containing pathways.}
 
