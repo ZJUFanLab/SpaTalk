@@ -568,7 +568,7 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
 #' @param top_lrpairs Number of top lrpairs for plotting. Default is \code{20}.
 #' @param color Color for the cells in heatmap.
 #' @param border_color color of cell borders on heatmap, use NA if no border should be drawn.
-#' @param type Set 'sig' to plot significant LR pairs or set 'number' to plot the number of spatial LR interactions.
+#' @param type Set 'sig' to plot significant LRI pairs or set 'number' to plot the number of spatial LRI pairs.
 #' @param fontsize_number fontsize of the numbers displayed in cells.
 #' @param number_color color of the text.
 #' @param color_low For 'number' type, define the color for the lowest value.
@@ -645,7 +645,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
             plot_res[lrpair$ligand[i], lrpair$receptor[i]] <- "*"
         }
         pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, color = heat_col, border_color = border_color, legend = F, display_numbers = plot_res,
-            fontsize_number = fontsize_number, number_color = number_color, main = "Significantly enriched LRI")
+            fontsize_number = fontsize_number, number_color = number_color, main = "Significantly enriched LRI pairs")
     } else {
         if (is.null(color_low)) {
             color_low <- "orange"
@@ -659,7 +659,7 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
         lrpair_mat <- lrpair_mat[, -1]
         heat_color <- grDevices::colorRampPalette(c(color_low, color_high))(max(as.matrix(lrpair_mat))-1)
         heat_color <- c("white", heat_color)
-        pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, border_color = border_color, color = heat_color, main = "Number of spatial LRIs")
+        pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, border_color = border_color, color = heat_color, main = "Number of spatial LRI pairs")
     }
 }
 

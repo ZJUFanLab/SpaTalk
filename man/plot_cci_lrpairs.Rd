@@ -31,7 +31,7 @@ plot_cci_lrpairs(
 
 \item{border_color}{color of cell borders on heatmap, use NA if no border should be drawn.}
 
-\item{type}{Set 'sig' to plot significant LR pairs or set 'number' to plot the number of spatial LR interactions.}
+\item{type}{Set 'sig' to plot significant LRI pairs or set 'number' to plot the number of spatial LRI pairs.}
 
 \item{fontsize_number}{fontsize of the numbers displayed in cells.}
 
