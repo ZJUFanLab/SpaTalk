@@ -806,10 +806,10 @@ get_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rece
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
     st_data <- .get_st_data(object)
     st_meta <- .get_st_meta(object)
-    if (!celltype_sender %in% colnames(object@coef)) {
+    if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
-    if (!celltype_receiver %in% colnames(object@coef)) {
+    if (!celltype_receiver %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_receiver!")
     }
     if (!ligand %in% rownames(st_data)) {

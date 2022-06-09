@@ -11,9 +11,11 @@ plot_cci_lrpairs(
   top_lrpairs = 20,
   color = NULL,
   border_color = "black",
-  type = NULL,
-  fontsize_number = 1,
-  number_color = "black"
+  type = "sig",
+  fontsize_number = 5,
+  number_color = "black",
+  color_low = NULL,
+  color_high = NULL
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ plot_cci_lrpairs(
 \item{fontsize_number}{fontsize of the numbers displayed in cells.}
 
 \item{number_color}{color of the text.}
+
+\item{color_low}{For 'number' type, define the color for the lowest value.}
+
+\item{color_high}{For 'number' type, define the color for the highest value.}
 }
 \description{
 Heatmap with LR pairs of celltype_sender and celltype_receiver

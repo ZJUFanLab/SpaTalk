@@ -571,13 +571,15 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
 #' @param type Set 'sig' to plot significant LR pairs or set 'number' to plot the number of spatial LR interactions.
 #' @param fontsize_number fontsize of the numbers displayed in cells.
 #' @param number_color color of the text.
-#' @import ggplot2 pheatmap
+#' @param color_low For 'number' type, define the color for the lowest value.
+#' @param color_high For 'number' type, define the color for the highest value.
+#' @import ggplot2 pheatmap grDevices
 #' @importFrom ggpubr get_palette
 #' @importFrom reshape2 dcast
 #' @export
 
-plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrpairs = 20, color = NULL,
-    border_color = "black", type = NULL, fontsize_number = 1, number_color = "black") {
+plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrpairs = 20, color = NULL, border_color = "black", type = "sig",
+    fontsize_number = 5, number_color = "black", color_low = NULL, color_high = NULL) {
     # check
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
@@ -624,25 +626,41 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     }
     ligand <- unique(lrpair$ligand)
     receptor <- unique(lrpair$receptor)
-    # get lrpair_real
-    lrpair_real <- object@lr_path$lrpairs
-    lrpair_real <- lrpair_real[, c(1, 2)]
-    lrpair_real$score <- 1
-    lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0, value.var = "score")
-    rownames(lrpair_mat) <- lrpair_mat$ligand
-    lrpair_mat <- lrpair_mat[, -1]
-    lrpair_mat <- lrpair_mat[ligand, receptor]
-    if (!is.data.frame(lrpair_mat)) {
-        stop("Limited number of ligand-receptor interactions!")
+    if (type == "sig") {
+        # get lrpair_real
+        lrpair_real <- object@lr_path$lrpairs
+        lrpair_real <- lrpair_real[, c(1, 2)]
+        lrpair_real$score <- 1
+        lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0, value.var = "score")
+        rownames(lrpair_mat) <- lrpair_mat$ligand
+        lrpair_mat <- lrpair_mat[, -1]
+        lrpair_mat <- lrpair_mat[ligand, receptor]
+        if (!is.data.frame(lrpair_mat)) {
+            stop("Limited number of ligand-receptor interactions!")
+        }
+        plot_res <- matrix("", nrow = length(ligand), ncol = length(receptor))
+        rownames(plot_res) <- ligand
+        colnames(plot_res) <- receptor
+        for (i in 1:nrow(lrpair)) {
+            plot_res[lrpair$ligand[i], lrpair$receptor[i]] <- "*"
+        }
+        pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, color = heat_col, border_color = border_color, legend = F, display_numbers = plot_res,
+            fontsize_number = fontsize_number, number_color = number_color, main = "Significantly enriched LRI")
+    } else {
+        if (is.null(color_low)) {
+            color_low <- "orange"
+        }
+        if (is.null(color_high)) {
+            color_high <- "red"
+        }
+        lrpair_real <- lrpair[,c("ligand","receptor","lr_co_exp_num")]
+        lrpair_mat <- reshape2::dcast(lrpair_real, formula = ligand ~ receptor, fill = 0, value.var = "lr_co_exp_num")
+        rownames(lrpair_mat) <- lrpair_mat$ligand
+        lrpair_mat <- lrpair_mat[, -1]
+        heat_color <- grDevices::colorRampPalette(c(color_low, color_high))(max(as.matrix(lrpair_mat))-1)
+        heat_color <- c("white", heat_color)
+        pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, border_color = border_color, color = heat_color, main = "Number of spatial LRIs")
     }
-    plot_res <- matrix("", nrow = length(ligand), ncol = length(receptor))
-    rownames(plot_res) <- ligand
-    colnames(plot_res) <- receptor
-    for (i in 1:nrow(lrpair)) {
-        plot_res[lrpair$ligand[i], lrpair$receptor[i]] <- "*"
-    }
-    pheatmap::pheatmap(lrpair_mat, cluster_cols = F, cluster_rows = F, color = heat_col, border_color = border_color,
-        legend = F, display_numbers = plot_res, fontsize_number = fontsize_number, number_color = number_color)
 }
 
 #' @title Plot LR pair
