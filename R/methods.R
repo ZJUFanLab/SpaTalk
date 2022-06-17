@@ -698,6 +698,8 @@ dec_cci_all <- function(object, n_neighbor = 10, min_pairs = 5, min_pairs_ratio 
                 }
             }
         }
+        doParallel::stopImplicitCluster()
+        parallel::stopCluster(cl)
         res_receptor_tf <- NULL
         res_lrpair <- NULL
         res_cellpair <- list()
