@@ -721,17 +721,28 @@
     # calculate co-expression ratio
     ndata_ligand <- st_data[lrdb$ligand, cell_pair$cell_sender]
     ndata_receptor <- st_data[lrdb$receptor, cell_pair$cell_receiver]
-    ndata_lr <- cbind(ndata_ligand, ndata_receptor)
-    lrdb$lr_co_ratio <- apply(ndata_lr, 1, .co_exp)
-    lrdb$lr_co_exp_num <- apply(ndata_lr, 1, .co_exp) * nrow(cell_pair)
+    if (nrow(lrdb) == 1) {
+        ndata_lr <- ndata_ligand * ndata_receptor
+        lrdb$lr_co_exp_num <- length(ndata_lr[ndata_lr > 0])
+        lrdb$lr_co_ratio <- length(ndata_lr[ndata_lr > 0])/length(ndata_lr)
+    } else {
+        ndata_lr <- cbind(ndata_ligand, ndata_receptor)
+        lrdb$lr_co_ratio <- apply(ndata_lr, 1, .co_exp)
+        lrdb$lr_co_exp_num <- apply(ndata_lr, 1, .co_exp) * nrow(cell_pair)
+    }
     # permutation test
     res_per <- foreach::foreach (j=1:per_num, .packages = "Matrix", .export = ".co_exp") %dopar% {
         set.seed(j)
         cell_id <- sample(x = 1:ncol(st_data), size = nrow(cell_pair) * 2, replace = T)
         ndata_ligand <- st_data[lrdb$ligand, cell_id[1:(length(cell_id)/2)]]
         ndata_receptor <- st_data[lrdb$receptor, cell_id[(length(cell_id)/2 + 1):length(cell_id)]]
-        ndata_lr <- cbind(ndata_ligand, ndata_receptor)
-        as.numeric(apply(ndata_lr, 1, .co_exp))
+        if (nrow(lrdb) == 1) {
+            ndata_lr <- ndata_ligand * ndata_receptor
+            length(ndata_lr[ndata_lr > 0])/length(ndata_lr)
+        } else {
+            ndata_lr <- cbind(ndata_ligand, ndata_receptor)
+            as.numeric(apply(ndata_lr, 1, .co_exp))
+        }
     }
     names(res_per) <- paste0("P", 1:length(res_per))
     res_per <- as.data.frame(res_per)
@@ -762,11 +773,17 @@
     lrdb$lr_co_ratio_pvalue <- 1
     rownames(lrdb) <- 1:nrow(lrdb)
     # calculate co-expression ratio
-    ndata_ligand <- st_data[lrdb$ligand, cell_pair$cell_sender]
-    ndata_receptor <- st_data[lrdb$receptor, cell_pair$cell_receiver]
-    ndata_lr <- cbind(ndata_ligand, ndata_receptor)
-    lrdb$lr_co_ratio <- apply(ndata_lr, 1, .co_exp)
-    lrdb$lr_co_exp_num <- apply(ndata_lr, 1, .co_exp) * nrow(cell_pair)
+    if (nrow(lrdb) == 1) {
+        ndata_lr <- ndata_ligand * ndata_receptor
+        lrdb$lr_co_exp_num <- length(ndata_lr[ndata_lr > 0])
+        lrdb$lr_co_ratio <- length(ndata_lr[ndata_lr > 0])/length(ndata_lr)
+    } else {
+        ndata_ligand <- st_data[lrdb$ligand, cell_pair$cell_sender]
+        ndata_receptor <- st_data[lrdb$receptor, cell_pair$cell_receiver]
+        ndata_lr <- cbind(ndata_ligand, ndata_receptor)
+        lrdb$lr_co_ratio <- apply(ndata_lr, 1, .co_exp)
+        lrdb$lr_co_exp_num <- apply(ndata_lr, 1, .co_exp) * nrow(cell_pair)
+    }
     # permutation test
     res_per <- list()
     for (j in 1:per_num) {
@@ -774,8 +791,13 @@
         cell_id <- sample(x = 1:ncol(st_data), size = nrow(cell_pair) * 2, replace = T)
         ndata_ligand <- st_data[lrdb$ligand, cell_id[1:(length(cell_id)/2)]]
         ndata_receptor <- st_data[lrdb$receptor, cell_id[(length(cell_id)/2 + 1):length(cell_id)]]
-        ndata_lr <- cbind(ndata_ligand, ndata_receptor)
-        res_per[[j]] <- apply(ndata_lr, 1, .co_exp)
+        if (nrow(lrdb) == 1) {
+            ndata_lr <- ndata_ligand * ndata_receptor
+            res_per[[j]] <- length(ndata_lr[ndata_lr > 0])/length(ndata_lr)
+        } else {
+            ndata_lr <- cbind(ndata_ligand, ndata_receptor)
+            res_per[[j]] <- apply(ndata_lr, 1, .co_exp)
+        }
     }
     names(res_per) <- paste0("P", 1:length(res_per))
     res_per <- as.data.frame(res_per)

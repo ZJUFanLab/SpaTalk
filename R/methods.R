@@ -502,6 +502,9 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL, if_doParalle
         parallel::stopCluster(cl)
     }
     lrpair <- lrpair[lrpair$receptor %in% res_ggi, ]
+    if (nrow(lrpair) == 0) {
+        stop("No ligand-recepotor pairs found!")
+    }
     object@lr_path <- list(lrpairs = lrpair, pathways = pathways)
     object@para$max_hop <- max_hop
     return(object)
