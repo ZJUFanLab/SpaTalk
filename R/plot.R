@@ -506,6 +506,9 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
+    if (is.null(cell_pair)) {
+        stop("No LR pairs found from the celltype_sender to celltype_receiver!")
+    }
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
@@ -531,16 +534,16 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
         st_meta$celltype <- factor(st_meta$celltype, levels = c(paste0("Sender: ", celltype_sender), paste0("Receiver: ", celltype_receiver)))
     }
     if (is.null(color)) {
-        cellname <- unique(st_meta$celltype)
+        cellname <- unique(as.character(st_meta$celltype))
         cellname <- cellname[order(cellname)]
         if ("unsure" %in% cellname) {
             cellname <- cellname[-which(cellname == "unsure")]
         }
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(cellname))
         if (if_plot_others) {
-            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)], "grey80")
+            color <- c(col_manual[which(cellname == paste0("Sender: ",celltype_sender))], col_manual[which(cellname == paste0("Receiver: ", celltype_receiver))], "grey80")
         } else {
-            color <- c(col_manual[which(cellname == celltype_sender)], col_manual[which(cellname == celltype_receiver)])
+            color <- c(col_manual[which(cellname == paste0("Sender: ",celltype_sender))], col_manual[which(cellname == paste0("Receiver: ", celltype_receiver))])
         }
     }
     p <- ggplot2::ggplot() + ggplot2::geom_point(data = st_meta, ggplot2::aes(x, y, color = celltype),
