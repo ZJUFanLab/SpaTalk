@@ -619,6 +619,9 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     heat_col <- (grDevices::colorRampPalette(c("white", color)))(2)
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
+    if (is.null(cell_pair)) {
+        stop("No LR pairs found from the celltype_sender to celltype_receiver!")
+    }
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     # get result from dec_cci
     lrpair <- object@lrpair
@@ -741,6 +744,9 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     }
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
+    if (is.null(cell_pair)) {
+        stop("No LR pairs found from the celltype_sender to celltype_receiver!")
+    }
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     cell_pair$x1 <- 0
     cell_pair$y1 <- 0
@@ -845,6 +851,9 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
     celltype_dist <- object@dist
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
+    if (is.null(cell_pair)) {
+        stop("No LR pairs found from the celltype_sender to celltype_receiver!")
+    }
     cell_pair <- cell_pair[cell_pair$cell_sender %in% st_meta$cell & cell_pair$cell_receiver %in% st_meta$cell, ]
     # calculate L-R distance across expressed cell-cell pairs
     ndata_ligand <- st_data[ligand, ]
@@ -914,6 +923,9 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     max_hop <- object@para$max_hop
     cell_pair <- object@cellpair
     cell_pair <- cell_pair[[paste0(celltype_sender, " -- ", celltype_receiver)]]
+    if (is.null(cell_pair)) {
+        stop("No LR pairs found from the celltype_sender to celltype_receiver!")
+    }
     co_exp_ratio <- object@para$co_exp_ratio
     ggi_res <- .generate_ggi_res(ggi_tf, cell_pair, receptor, st_data, max_hop, co_exp_ratio)
     tf_gene_all <- .generate_tf_gene_all(ggi_res, max_hop)
