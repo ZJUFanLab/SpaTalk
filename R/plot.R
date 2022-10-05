@@ -77,7 +77,7 @@ plot_st_pie <- function(object, pie_scale = 1, xy_ratio = 1, color = NULL) {
 #' @param color_high Color for the highest value.
 #' @param color_midpoint Value for the middle scale. Default is \code{NULL}.
 #' @param if_use_newmeta Whether to use newmeta o plot the spatial distribution of gene after \code{\link{dec_celltype}} for spot-based data. Default is \code{TRUE}.
-#' @param celltype gene in which celltype to plot. Default is \code{NULL}. Set \code{Nif_use_newmeta} TRUE when using this parameter.
+#' @param celltype gene in which celltype to plot. Default is \code{NULL}. Set \code{if_use_newmeta} TRUE when using this parameter.
 #' @param if_plot_others Whether to plot other cells when to use defined \code{celltype}.
 #' @import ggplot2
 #' @importFrom stats median
@@ -91,26 +91,32 @@ plot_st_gene <- function(object, gene, size = 1, color_low = "grey", color_mid =
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
         st_data <- object@data
-        if ("rawndata" %in% names(st_data)) {
-            st_data <- object@data$rawndata
-        } else {
+        if (if_skip_dec_celltype) {
             st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$rawndata
         }
     }
     if (st_type == "spot") {
         if (if_use_newmeta) {
-            st_meta <- object@meta$newmeta
-            st_data <- object@data$newdata
+            if (if_skip_dec_celltype) {
+                warning("if_use_newmeta is not used when skiping dec_celltype()!")
+                st_meta <- object@meta$rawmeta
+                st_data <- object@data$rawdata
+            } else {
+                st_meta <- object@meta$newmeta
+                st_data <- object@data$newdata
+            }
         } else {
             st_meta <- object@meta$rawmeta
-            st_data <- object@data
-            if ("rawndata" %in% names(st_data)) {
-                st_data <- object@data$rawndata
-            } else {
+            if (if_skip_dec_celltype) {
                 st_data <- object@data$rawdata
+            } else {
+                st_data <- object@data$rawndata
             }
         }
     }
@@ -164,11 +170,16 @@ plot_st_celltype <- function(object, celltype, size = 1, color_celltype = "blue"
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
     }
     if (st_type == "spot") {
-        st_meta <- object@meta$newmeta
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+        } else {
+            st_meta <- object@meta$newmeta
+        }
     }
     if (length(celltype) > 1) {
         stop("Please provide a single cell type name each time!")
@@ -212,11 +223,16 @@ plot_st_celltype_density <- function(object, celltype, type, if_plot_point = T, 
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
     }
     if (st_type == "spot") {
-        st_meta <- object@meta$newmeta
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+        } else {
+            st_meta <- object@meta$newmeta
+        }
     }
     if (length(celltype) > 1) {
         stop("Please provide a single cell type name each time!")
@@ -281,6 +297,10 @@ plot_st_celltype_percent <- function(object, celltype, size = 1, color_low = NUL
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
     }
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (if_skip_dec_celltype) {
+        stop("Not availible when skiping dec_celltype()!")
+    }
     # get result from dec_celltype
     st_meta <- object@meta$rawmeta
     if (length(celltype) > 1) {
@@ -328,10 +348,16 @@ plot_st_celltype_all <- function(object, size = 1, color = NULL) {
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-    } else {
-        st_meta <- object@meta$newmeta
+    }
+    if (st_type == "spot") {
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+        } else {
+            st_meta <- object@meta$newmeta
+        }
     }
     if (is.null(color)) {
         col_manual <- ggpubr::get_palette(palette = "lancet", k = length(unique(st_meta$celltype)))
@@ -368,16 +394,13 @@ plot_st_cor_heatmap <- function(object, marker_genes, celltypes, color_low = NUL
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
     }
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (if_skip_dec_celltype) {
+        stop("Not availible when skiping dec_celltype()!")
+    }
     # get result from dec_celltype
-    st_type <- object@para$st_type
-    if (st_type == "single-cell") {
-        st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
-    }
-    if (st_type == "spot") {
-        st_meta <- object@meta$rawmeta
-        st_data <- object@data$rawndata
-    }
+    st_meta <- object@meta$rawmeta
+    st_data <- object@data$rawndata
     st_type_coef <- object@coef
     if (!all(celltypes %in% colnames(st_type_coef))) {
         celltypes <- celltypes[which(!celltypes %in% colnames(st_type_coef))]
@@ -481,10 +504,16 @@ plot_ccdist <- function(object, celltype_sender, celltype_receiver, color = NULL
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
     } else {
-        st_meta <- object@meta$newmeta
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+        } else {
+            st_meta <- object@meta$newmeta
+        }
     }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
@@ -589,17 +618,23 @@ plot_cci_lrpairs <- function(object, celltype_sender, celltype_receiver, top_lrp
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data
-        if ("rawndata" %in% names(st_data)) {
-            st_data <- object@data$rawndata
-        } else {
+        if (if_skip_dec_celltype) {
             st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$rawndata
         }
     } else {
-        st_meta <- object@meta$newmeta
-        st_data <- object@data$newdata
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+            st_data <- object@data$rawdata
+        } else {
+            st_meta <- object@meta$newmeta
+            st_data <- object@data$newdata
+        }
     }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
@@ -697,17 +732,23 @@ plot_lrpair <- function(object, celltype_sender, celltype_receiver, ligand, rece
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data
-        if ("rawndata" %in% names(st_data)) {
-            st_data <- object@data$rawndata
-        } else {
+        if (if_skip_dec_celltype) {
             st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$rawndata
         }
     } else {
-        st_meta <- object@meta$newmeta
-        st_data <- object@data$newdata
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+            st_data <- object@data$rawdata
+        } else {
+            st_meta <- object@meta$newmeta
+            st_data <- object@data$newdata
+        }
     }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
@@ -815,17 +856,23 @@ plot_lrpair_vln <- function(object, celltype_sender, celltype_receiver, ligand, 
     }
     # get result from dec_celltype
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
-        st_data <- object@data
-        if ("rawndata" %in% names(st_data)) {
-          st_data <- object@data$rawndata
+        if (if_skip_dec_celltype) {
+            st_data <- object@data$rawdata
         } else {
-          st_data <- object@data$rawdata
+            st_data <- object@data$rawndata
         }
     } else {
-        st_meta <- object@meta$newmeta
-        st_data <- object@data$newdata
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+            st_data <- object@data$rawdata
+        } else {
+            st_meta <- object@meta$newmeta
+            st_data <- object@data$newdata
+        }
     }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
@@ -906,8 +953,26 @@ plot_lr_path <- function(object, celltype_sender, celltype_receiver, ligand, rec
     }
     pathways <- object@lr_path$pathways
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
-    st_data <- .get_st_data(object)
-    st_meta <- .get_st_meta(object)
+    # get result from dec_celltype
+    st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (st_type == "single-cell") {
+        st_meta <- object@meta$rawmeta
+        if (if_skip_dec_celltype) {
+            st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$rawndata
+        }
+    } else {
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+            st_data <- object@data$rawdata
+        } else {
+            st_meta <- object@meta$newmeta
+            st_data <- object@data$newdata
+        }
+    }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }
@@ -1038,8 +1103,26 @@ plot_path2gene <- function(object, celltype_sender, celltype_receiver, ligand, r
     tf_path_all <- get_lr_path(object, celltype_sender, celltype_receiver, ligand, receptor, min_gene_num)[[1]]
     pathways <- object@lr_path$pathways
     ggi_tf <- unique(pathways[, c("src", "dest", "src_tf", "dest_tf")])
-    st_data <- .get_st_data(object)
-    st_meta <- .get_st_meta(object)
+    # get result from dec_celltype
+    st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (st_type == "single-cell") {
+        st_meta <- object@meta$rawmeta
+        if (if_skip_dec_celltype) {
+            st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$rawndata
+        }
+    } else {
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+            st_data <- object@data$rawdata
+        } else {
+            st_meta <- object@meta$newmeta
+            st_data <- object@data$newdata
+        }
+    }
     if (!celltype_sender %in% st_meta$celltype) {
         stop("Please provide the correct name of celltype_sender!")
     }

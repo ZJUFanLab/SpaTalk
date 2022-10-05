@@ -145,12 +145,15 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
             stop("Length of celltype must be equal to nrow(st_meta)!")
         }
         st_meta$celltype <- celltype
+        if_skip_dec_celltype <- TRUE
+    } else {
+        if_skip_dec_celltype <- FALSE
     }
     # dist
     st_dist <- .st_dist(st_meta)
     # generate SpaTalk object
     object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
-        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell), dist = st_dist)
+        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell, if_skip_dec_celltype = if_skip_dec_celltype), dist = st_dist)
     return(object)
 }
 
@@ -183,6 +186,10 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if_doParallel = T, use_n_cores = NULL, iter_num = 1000, method = 1, env = "base", anaconda_path = "~/anaconda3", dec_result = NULL) {
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
+    }
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (if_skip_dec_celltype) {
+        stop("Do not perform dec_celltype() when providing celltype in createSpaTalk()!")
     }
     n.threads <- 1
     if (is.null(use_n_cores)) {
@@ -413,7 +420,6 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL, if_doParalle
         cl <- parallel::makeCluster(n_cores)
         doParallel::registerDoParallel(cl)
     }
-    st_meta <- .get_st_meta(object)
     st_data <- .get_st_data(object)
     species <- object@para$species
     lrpair <- lrpairs[lrpairs$species == species, ]
@@ -543,7 +549,8 @@ dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
     }
     if (if_doParallel) {
         cl <- parallel::makeCluster(n_cores)
-        doParallel::registerDoParallel(cl)
+        doParall
+        el::registerDoParallel(cl)
     }
     st_meta <- .get_st_meta(object)
     st_data <- .get_st_data(object)

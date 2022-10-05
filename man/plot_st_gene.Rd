@@ -34,7 +34,7 @@ plot_st_gene(
 
 \item{if_use_newmeta}{Whether to use newmeta o plot the spatial distribution of gene after \code{\link{dec_celltype}} for spot-based data. Default is \code{TRUE}.}
 
-\item{celltype}{gene in which celltype to plot. Default is \code{NULL}. Set \code{Nif_use_newmeta} TRUE when using this parameter.}
+\item{celltype}{gene in which celltype to plot. Default is \code{NULL}. Set \code{if_use_newmeta} TRUE when using this parameter.}
 
 \item{if_plot_others}{Whether to plot other cells when to use defined \code{celltype}.}
 }

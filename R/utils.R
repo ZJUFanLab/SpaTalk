@@ -635,6 +635,7 @@
 
 .get_st_meta <- function(object) {
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_meta <- object@meta$rawmeta
         st_meta <- st_meta[st_meta$celltype != "unsure", ]
@@ -643,33 +644,42 @@
             stop("No cell types found in rawmeta by excluding the unsure and less nFeatures cells!")
         }
     } else {
-        st_meta <- object@meta$newmeta
+        if (if_skip_dec_celltype) {
+            st_meta <- object@meta$rawmeta
+            colnames(st_meta)[1] <- "cell"
+        } else {
+            st_meta <- object@meta$newmeta
+        }
     }
     return(st_meta)
 }
 
 .get_st_data <- function(object) {
     st_type <- object@para$st_type
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
     if (st_type == "single-cell") {
         st_data <- object@data
-        if ("rawndata" %in% names(st_data)) {
-            st_data <- st_data$rawndata
-        } else {
+        if (if_skip_dec_celltype) {
             st_data <- st_data$rawdata
+        } else {
+            st_data <- st_data$rawndata
         }
         st_meta <- object@meta$rawmeta
         st_meta <- st_meta[st_meta$celltype != "unsure", ]
         st_meta <- st_meta[st_meta$label != "less nFeatures", ]
         st_data <- st_data[, st_meta$cell]
-        gene_expressed_ratio <- rowSums(as.matrix(st_data))
+        gene_expressed_ratio <- rowSums(st_data)
         st_data <- st_data[which(gene_expressed_ratio > 0), ]
         if (nrow(st_data) == 0) {
             stop("No cell types found in rawmeta by excluding the unsure and less nFeatures cells!")
         }
     } else {
-        st_data <- object@data$newdata
-        st_meta <- object@meta$newmeta
-        gene_expressed_ratio <- rowSums(as.matrix(st_data))
+        if (if_skip_dec_celltype) {
+            st_data <- object@data$rawdata
+        } else {
+            st_data <- object@data$newdata
+        }
+        gene_expressed_ratio <- rowSums(st_data)
         st_data <- st_data[which(gene_expressed_ratio > 0), ]
         if (nrow(st_data) == 0) {
             stop("No expressed genes in newdata!")
