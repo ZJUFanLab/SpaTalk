@@ -549,8 +549,7 @@ dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
     }
     if (if_doParallel) {
         cl <- parallel::makeCluster(n_cores)
-        doParall
-        el::registerDoParallel(cl)
+        doParallel::registerDoParallel(cl)
     }
     st_meta <- .get_st_meta(object)
     st_data <- .get_st_data(object)
