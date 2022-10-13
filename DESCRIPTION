@@ -35,7 +35,8 @@ Imports:
     igraph,
     foreach,
     parallel,
-    iterators
+    iterators,
+    readr
 Suggests: 
     rmarkdown,
     knitr,
