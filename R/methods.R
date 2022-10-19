@@ -315,7 +315,7 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         }
         dec_colname <- colnames(dec_result)
         dec_colname <- stringr::str_replace_all(dec_colname, pattern = "-", replacement = "_")
-        if (!all(dec_colname) %in% unique(sc_celltype$celltype)) {
+        if (!all(dec_colname %in% unique(sc_celltype$celltype))) {
             stop("Celltype name in dec_result must be consistent with the names in scRNA-seq reference!")
         }
         dec_rowname <- rownames(dec_result)
