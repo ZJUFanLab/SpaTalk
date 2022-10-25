@@ -44,9 +44,9 @@ dec_celltype(
 
 \item{method}{1 means using the SpaTalk deconvolution method, 2 means using RCTD, 3 means using Seurat, 4 means using SPOTlight, 5 means using deconvSeq, 6 means using stereoscope, 7 means using cell2location}
 
-\item{env}{When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended.}
+\item{env}{When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended. When method set to 7, namely use cell2location python package to deconvolute, please install cell2location to "base" environment.}
 
-\item{anaconda_path}{When using cell2location, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"}
+\item{anaconda_path}{When using stereoscope, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"}
 
 \item{dec_result}{A matrix of deconvolution result from other upcoming methods, row represents spots or cells, column represents cell types of scRNA-seq reference. See \code{\link{demo_dec_result}}}
 }

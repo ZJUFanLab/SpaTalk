@@ -171,8 +171,8 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
 #' @param use_n_cores Number of CPU cores to use. Default is all cores - 2.
 #' @param iter_num Number of iteration to generate the single-cell data for spot-based data. Default is \code{1000}.
 #' @param method 1 means using the SpaTalk deconvolution method, 2 means using RCTD, 3 means using Seurat, 4 means using SPOTlight, 5 means using deconvSeq, 6 means using stereoscope, 7 means using cell2location
-#' @param env When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended.
-#' @param anaconda_path When using cell2location, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"
+#' @param env When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended. When method set to 7, namely use cell2location python package to deconvolute, please install cell2location to "base" environment.
+#' @param anaconda_path When using stereoscope, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"
 #' @param dec_result A matrix of deconvolution result from other upcoming methods, row represents spots or cells, column represents cell types of scRNA-seq reference. See \code{\link{demo_dec_result}}
 #' @return SpaTalk object containing the decomposing results.
 #' @import Matrix progress methods Seurat foreach doParallel parallel iterators readr
@@ -329,6 +329,8 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     st_coef <- st_coef[ ,coef_name]
     object@coef <- st_coef
     st_meta <- cbind(st_meta, .coef_nor(st_coef))
+    st_ndata <- st_ndata[genename, ]
+    sc_ndata <- sc_ndata[genename, ]
     if (st_type == "single-cell") {
         object@meta$rawmeta <- .determine_celltype(st_meta, min_percent)
     } else {
