@@ -248,8 +248,6 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if (length(genename) == 0) {
         stop("No overlapped genes between st_data and sc_data!")
     }
-    st_data <- st_data[genename, ]
-    sc_data <- sc_data[genename, ]
     if (method == 1 & is.null(dec_result)) {
         object@data$rawndata <- st_ndata
         st_ndata <- st_ndata[genename, ]
