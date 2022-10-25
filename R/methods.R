@@ -172,7 +172,7 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
 #' @param iter_num Number of iteration to generate the single-cell data for spot-based data. Default is \code{1000}.
 #' @param method 1 means using the SpaTalk deconvolution method, 2 means using RCTD, 3 means using Seurat, 4 means using SPOTlight, 5 means using deconvSeq, 6 means using stereoscope, 7 means using cell2location
 #' @param env When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended.
-#' @param anaconda_path When use python package, please define the path to anaconda, default is ~/anaconda3
+#' @param anaconda_path When using cell2location, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"
 #' @param dec_result A matrix of deconvolution result from other upcoming methods, row represents spots or cells, column represents cell types of scRNA-seq reference. See \code{\link{demo_dec_result}}
 #' @return SpaTalk object containing the decomposing results.
 #' @import Matrix progress methods Seurat foreach doParallel parallel iterators readr

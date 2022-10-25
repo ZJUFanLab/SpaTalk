@@ -46,7 +46,7 @@ dec_celltype(
 
 \item{env}{When method set to 6, namely use stereoscope python package to deconvolute, please define the python environment of installed stereoscope. Default is the 'base' environment. Anaconda is recommended.}
 
-\item{anaconda_path}{When use python package, please define the path to anaconda, default is ~/anaconda3}
+\item{anaconda_path}{When using cell2location, please define the \code{env} parameter as well as the path to anaconda. Default is "~/anaconda3"}
 
 \item{dec_result}{A matrix of deconvolution result from other upcoming methods, row represents spots or cells, column represents cell types of scRNA-seq reference. See \code{\link{demo_dec_result}}}
 }
