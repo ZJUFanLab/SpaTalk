@@ -189,7 +189,7 @@
     return(as.matrix(st_coef))
 }
 
-.generate_ref <- function(sc_ndata, sc_celltype, n_cores, if_doParallel) {
+.generate_ref <- function(sc_ndata, sc_celltype, if_doParallel) {
     ref_celltype <- unique(sc_celltype$celltype)
     if (if_doParallel) {
         sc_ref <- foreach::foreach(i = 1:length(ref_celltype), .combine = "cbind", .packages = "Matrix") %dopar% {
@@ -491,7 +491,7 @@
     return(st_meta_neighbor)
 }
 
-.generate_newmeta_doParallel <- function(st_meta, st_dist, min_percent, n_cores) {
+.generate_newmeta_doParallel <- function(st_meta, st_dist, min_percent) {
     # generate new data
     st_meta <- st_meta[st_meta$label != "less nFeatures", ]
     cellname <- colnames(st_meta)[-c(1:7)]
@@ -583,15 +583,19 @@
     return(newmeta)
 }
 
-.generate_newmeta_cell <- function(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, if_doParallel) {
+.generate_newmeta_cell <- function(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, n_cores, if_doParallel) {
     newmeta_spotname <- unique(newmeta$spot)
     newmeta_cell <- NULL
     cat(crayon::cyan("Generating single-cell data for each spot", "\n"))
     if (if_doParallel) {
+        cl <- parallel::makeCluster(n_cores)
+        doParallel::registerDoParallel(cl)
         newmeta_cell <- foreach::foreach (i = 1:length(newmeta_spotname), .combine = "rbind", .packages = "Matrix", .export = ".generate_newmeta_spot") %dopar% {
             spot_name <- newmeta_spotname[i]
             .generate_newmeta_spot(spot_name, newmeta, st_ndata, sc_ndata, sc_celltype, iter_num)
         }
+        doParallel::stopImplicitCluster()
+        parallel::stopCluster(cl)
     } else {
         for (i in 1:length(newmeta_spotname)) {
             spot_name <- newmeta_spotname[i]

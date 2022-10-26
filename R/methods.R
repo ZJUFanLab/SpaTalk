@@ -149,11 +149,9 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
     } else {
         if_skip_dec_celltype <- FALSE
     }
-    # dist
-    st_dist <- .st_dist(st_meta)
     # generate SpaTalk object
     object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
-        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell, if_skip_dec_celltype = if_skip_dec_celltype), dist = st_dist)
+        para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell, if_skip_dec_celltype = if_skip_dec_celltype))
     return(object)
 }
 
@@ -167,6 +165,7 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
 #' @param min_nFeatures Min number of expressed features/genes for each spot/cell in \code{st_data}. Default is \code{10}.
 #' @param if_use_normalize_data Whether to use normalized \code{st_data} and \code{sc_data} with Seurat normalization. Default is \code{TRUE}. set it \code{FALSE} when the st_data and sc_data are already normalized matrix with other methods.
 #' @param if_use_hvg Whether to use highly variable genes for non-negative regression. Default is \code{FALSE}.
+#' @param if_retain_other_genes Whether to retain other genes which are not overlapped between sc_data and st_data when reconstructing the single-cell ST data. Default is \code{FALSE}. Set it \code{TRUE} to obtain the constructed single-cell ST data with genes consistent with that in sc_data.
 #' @param if_doParallel Use doParallel. Default is TRUE.
 #' @param use_n_cores Number of CPU cores to use. Default is all cores - 2.
 #' @param iter_num Number of iteration to generate the single-cell data for spot-based data. Default is \code{1000}.
@@ -183,7 +182,7 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
 #' @export
 
 dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nFeatures = 10, if_use_normalize_data = T, if_use_hvg = F,
-    if_doParallel = T, use_n_cores = NULL, iter_num = 1000, method = 1, env = "base", anaconda_path = "~/anaconda3", dec_result = NULL) {
+    if_retain_other_genes = F, if_doParallel = T, use_n_cores = NULL, iter_num = 1000, method = 1, env = "base", anaconda_path = "~/anaconda3", dec_result = NULL) {
     if (!is(object, "SpaTalk")) {
         stop("Invalid class for object: must be 'SpaTalk'!")
     }
@@ -191,23 +190,26 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if (if_skip_dec_celltype) {
         stop("Do not perform dec_celltype() when providing celltype in createSpaTalk()!")
     }
-    n.threads <- 1
-    if (is.null(use_n_cores)) {
-        n.threads <- 0
-        n_cores <- parallel::detectCores()
-        n_cores <- n_cores-2
-    } else {
-        n_cores <- use_n_cores
-        if (use_n_cores > 1) {
+    if (if_doParallel) {
+        if (is.null(use_n_cores)) {
+            n_cores <- parallel::detectCores()
+            n_cores <- floor(n_cores/2)
+        } else {
+            n_cores <- use_n_cores
+        }
+        n.threads <- n_cores
+        if (n_cores == 1) {
+            if_doParallel <- F
             n.threads <- 0
         }
-    }
-    if (if_doParallel) {
-        cl <- parallel::makeCluster(n_cores)
-        doParallel::registerDoParallel(cl)
+    } else {
+        n_cores <- 1
+        n.threads <- 0
     }
     st_data <- object@data[["rawdata"]]
     st_meta <- object@meta[["rawmeta"]]
+    # dist
+    st_dist <- .st_dist(st_meta)
     if (min(st_meta$nFeatures) < min_nFeatures) {
         st_meta[st_meta$nFeatures < min_nFeatures, ]$label <- "less nFeatures"
     }
@@ -244,6 +246,7 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         st_ndata <- st_data
         sc_ndata <- sc_data
     }
+    sc_ndata_raw <- sc_ndata
     genename <- intersect(rownames(st_data), rownames(sc_data))
     if (length(genename) == 0) {
         stop("No overlapped genes between st_data and sc_data!")
@@ -261,14 +264,21 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         # use hvg
         if (if_use_hvg) {
             sc_hvg <- .hvg(sc_ndata, sc_celltype)
-            sc_ndata_raw <- sc_ndata
             if (length(sc_hvg) > 0) {
                 st_ndata <- st_ndata[sc_hvg, ]
                 sc_ndata <- sc_ndata[sc_hvg, ]
             }
         }
+        if (if_doParallel) {
+            cl <- parallel::makeCluster(n_cores)
+            doParallel::registerDoParallel(cl)
+        }
         # generate sc_ref data
-        sc_ref <- .generate_ref(sc_ndata, sc_celltype, n_cores, if_doParallel)
+        sc_ref <- .generate_ref(sc_ndata, sc_celltype, if_doParallel)
+        if (if_doParallel) {
+            doParallel::stopImplicitCluster()
+            parallel::stopCluster(cl)
+        }
         # deconvolution
         st_nnlm <- NNLM::nnlm(x = as.matrix(sc_ref), y = as.matrix(st_ndata), method = "lee", loss = "mkl", n.threads = n.threads)
         st_coef <- t(st_nnlm$coefficients)
@@ -332,29 +342,34 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if (st_type == "single-cell") {
         object@meta$rawmeta <- .determine_celltype(st_meta, min_percent)
     } else {
-        st_dist <- object@dist
         if (if_doParallel) {
-            newmeta <- .generate_newmeta_doParallel(st_meta, st_dist, min_percent, n_cores)
+            cl <- parallel::makeCluster(n_cores)
+            doParallel::registerDoParallel(cl)
+            newmeta <- .generate_newmeta_doParallel(st_meta, st_dist, min_percent)
+            doParallel::stopImplicitCluster()
+            parallel::stopCluster(cl)
         } else {
             newmeta <- .generate_newmeta(st_meta, st_dist, min_percent)
         }
-        newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, if_doParallel)
-        if (if_use_hvg) {
+        newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, n_cores, if_doParallel)
+        if (if_retain_other_genes) {
             sc_ndata <- sc_ndata_raw
+        } else {
+            if (if_use_hvg) {
+                sc_ndata <- sc_ndata_raw
+                sc_ndata <- sc_ndata[genename, ]
+            }
         }
         newdata <- sc_ndata[, newmeta_cell$cell_id]
         colnames(newdata) <- newmeta_cell$cell
         object@data$newdata <- methods::as(newdata, Class = "dgCMatrix")
         object@meta$newmeta <- newmeta_cell
         st_meta[st_meta$spot %in% newmeta_cell$spot, ]$celltype <- "sure"
-        object@dist <- .st_dist(newmeta_cell)
+        st_dist <- .st_dist(newmeta_cell)
         object@meta$rawmeta <- st_meta
     }
     cat(crayon::green("***Done***", "\n"))
-    if (if_doParallel) {
-        doParallel::stopImplicitCluster()
-        parallel::stopCluster(cl)
-    }
+    object@dist <- st_dist
     object@para$min_percent <- min_percent
     object@para$min_nFeatures <- min_nFeatures
     object@para$if_use_normalize_data <- if_use_normalize_data

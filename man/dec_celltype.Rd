@@ -12,6 +12,7 @@ dec_celltype(
   min_nFeatures = 10,
   if_use_normalize_data = T,
   if_use_hvg = F,
+  if_retain_other_genes = F,
   if_doParallel = T,
   use_n_cores = NULL,
   iter_num = 1000,
@@ -35,6 +36,8 @@ dec_celltype(
 \item{if_use_normalize_data}{Whether to use normalized \code{st_data} and \code{sc_data} with Seurat normalization. Default is \code{TRUE}. set it \code{FALSE} when the st_data and sc_data are already normalized matrix with other methods.}
 
 \item{if_use_hvg}{Whether to use highly variable genes for non-negative regression. Default is \code{FALSE}.}
+
+\item{if_retain_other_genes}{Whether to retain other genes which are not overlapped between sc_data and st_data when reconstructing the single-cell ST data. Default is \code{FALSE}. Set it \code{TRUE} to obtain the constructed single-cell ST data with genes consistent with that in sc_data.}
 
 \item{if_doParallel}{Use doParallel. Default is TRUE.}
 
