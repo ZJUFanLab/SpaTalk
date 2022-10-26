@@ -64,9 +64,9 @@ SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://
 __Please refer to the [tutorial vignette](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html) with demo data processing steps. Detailed functions see the [document](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/SpaTalk.pdf)__
 
 ### News
-- Fix the bug in `dec_celltype()` when using other deconvolution methods
+- Fix the bug in `dec_celltype()` when using other deconvolution methods, [see issue 11](https://github.com/ZJUFanLab/SpaTalk/issues/11)
 - Fix the bug in performing parallel functions
-- __Allow to retain genes consistent with reference `sc_data` for reconstructed single-cell ST data [wiki](https://github.com/ZJUFanLab/SpaTalk/wiki/Retain-all-genes-in-the-reference)__
+- __Allow to retain genes consistent with reference `sc_data` for reconstructed single-cell ST data [(wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Retain-all-genes-in-the-reference)__
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
