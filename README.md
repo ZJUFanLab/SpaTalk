@@ -66,7 +66,7 @@ __Please refer to the [tutorial vignette](https://raw.githack.com/ZJUFanLab/SpaT
 ### News
 - Fix the bug in `dec_celltype()` when using other deconvolution methods
 - Fix the bug in performing parallel functions
-- Allow to retain genes consistent with reference `sc_data` for reconstructed single-cell ST data [wiki](https://github.com/ZJUFanLab/SpaTalk/wiki/Retain-all-genes-in-the-reference)
+- __Allow to retain genes consistent with reference `sc_data` for reconstructed single-cell ST data [wiki](https://github.com/ZJUFanLab/SpaTalk/wiki/Retain-all-genes-in-the-reference)__
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
