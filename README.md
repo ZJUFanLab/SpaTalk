@@ -1,5 +1,5 @@
 # SpaTalk
-[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6809147.svg)](https://doi.org/10.5281/zenodo.6809147) [![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41467--022--32111--8-yellowgreen)](https://www.nature.com/articles/s41467-022-32111-8)
+[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6809147.svg)](https://doi.org/10.5281/zenodo.6809147) [![jupyter](https://img.shields.io/badge/Computational--tools-cell--cell%20communication-yellow?logo=jupyter)](https://github.com/shaoxin0801/Cell-cell-communication/blob/main/method/SpaTalk.ipynb) [![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41467--022--32111--8-yellowgreen)](https://www.nature.com/articles/s41467-022-32111-8)
 
 ### A cell-cell communication inference approach for spatially resolved transcriptomic data
 
