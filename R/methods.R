@@ -528,6 +528,11 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL, if_doParalle
     }
     object@lr_path <- list(lrpairs = lrpair, pathways = pathways)
     object@para$max_hop <- max_hop
+    if_skip_dec_celltype <- object@para$if_skip_dec_celltype
+    if (if_skip_dec_celltype) {
+        st_meta <- object@meta$rawmeta
+        object@dist <- st_dist
+    }
     return(object)
 }
 
