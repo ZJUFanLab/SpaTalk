@@ -20,12 +20,8 @@ devtools::install_github('linxihui/NNLM')
 
 ```
 devtools::install_github('ZJUFanLab/SpaTalk')
-```
 
-- OR
-
-```
-# download the repository as ZIP
+# or download the repository as ZIP
 devtools::install_local("/path/to/miRTalk-main.zip")
 ```
 
