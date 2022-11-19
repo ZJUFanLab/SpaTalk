@@ -9,20 +9,20 @@
 
 # Install
 
-- ### install dependent packages `devtools` and [`NNLM`](https://github.com/linxihui/NNLM)
+- install dependent packages `devtools` and [`NNLM`](https://github.com/linxihui/NNLM)
 
 ```
 install.packages(pkgs = 'devtools')
 devtools::install_github('linxihui/NNLM')
 ```
 
-- ### then install SpaTalk
+- then install SpaTalk
 
 ```
 devtools::install_github('ZJUFanLab/SpaTalk')
 ```
 
-- ### OR
+- OR
 
 ```
 # download the repository as ZIP
