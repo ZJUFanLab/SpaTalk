@@ -1,3 +1,33 @@
+.rename_chr <- function(x){
+    x <- strsplit(x, split = " ")
+    x_new <- NULL
+    for (i in 1:length(x)) {
+        x1 <- x[[i]]
+        if (length(x1) > 1) {
+            x2 <- x1[1]
+            for (j in 2:length(x1)) {
+                x2 <- paste(x2, x1[j], sep = "_")
+            }
+            x1 <- x2
+        }
+        x_new <- c(x_new, x1)
+    }
+    x <- strsplit(x_new, split = "-")
+    x_new <- NULL
+    for (i in 1:length(x)) {
+        x1 <- x[[i]]
+        if (length(x1) > 1) {
+            x2 <- x1[1]
+            for (j in 2:length(x1)) {
+                x2 <- paste(x2, x1[j], sep = "_")
+            }
+            x1 <- x2
+        }
+        x_new <- c(x_new, x1)
+    }
+    return(x_new)
+}
+
 .percent_cell <- function(x) {
     return(length(x[x > 0]))
 }

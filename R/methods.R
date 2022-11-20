@@ -144,11 +144,14 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
         if (length(celltype) != nrow(st_meta)) {
             stop("Length of celltype must be equal to nrow(st_meta)!")
         }
+        celltype <-.rename_chr(celltype)
         st_meta$celltype <- celltype
         if_skip_dec_celltype <- TRUE
     } else {
         if_skip_dec_celltype <- FALSE
     }
+    st_meta[, 1] <- .rename_chr(st_meta[, 1])
+    colnames(st_data) <- st_meta[,1]
     # generate SpaTalk object
     object <- new("SpaTalk", data = list(rawdata = st_data), meta = list(rawmeta = st_meta),
         para = list(species = species, st_type = st_type, spot_max_cell = spot_max_cell, if_skip_dec_celltype = if_skip_dec_celltype))
@@ -236,8 +239,9 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if (nrow(sc_data) == 0) {
         stop("No expressed genes in sc_data!")
     }
+    colnames(sc_data) <- .rename_chr(colnames(sc_data))
+    sc_celltype <- .rename_chr(sc_celltype)
     sc_celltype <- data.frame(cell = colnames(sc_data), celltype = sc_celltype, stringsAsFactors = F)
-    sc_celltype$celltype <- stringr::str_replace_all(sc_celltype$celltype, pattern = "-", replacement = "_")
     object@data$rawndata <- st_data
     if (if_use_normalize_data == T) {
         st_ndata <- .normalize_data(st_data)
