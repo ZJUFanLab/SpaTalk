@@ -28,6 +28,36 @@
     return(x_new)
 }
 
+.show_warning <- function(celltype, celltype_new){
+    sc_meta <- data.frame(celltype = celltype, celltype_new = celltype_new, stringsAsFactors = FALSE)
+    sc_meta <- unique(sc_meta)
+    sc_meta <- sc_meta[sc_meta$celltype != sc_meta$celltype_new, ]
+    warning_info <- NULL
+    if (nrow(sc_meta) > 0) {
+        warning_info <- "celltype of "
+        if (nrow(sc_meta) == 1) {
+            warning_info <- paste0(warning_info, sc_meta$celltype[1], " has been replaced by ", sc_meta$celltype_new[1])
+        } else {
+            for (i in 1:nrow(sc_meta)) {
+                if (i == nrow(sc_meta)) {
+                    warning_info <- paste0(warning_info, "and ",sc_meta$celltype[i])
+                } else {
+                    warning_info <- paste0(warning_info, sc_meta$celltype[i], ", ")
+                }
+            }
+            warning_info <- paste0(warning_info, " have been replaced by ")
+            for (i in 1:nrow(sc_meta)) {
+                if (i == nrow(sc_meta)) {
+                    warning_info <- paste0(warning_info, "and ",sc_meta$celltype_new[i])
+                } else {
+                    warning_info <- paste0(warning_info, sc_meta$celltype_new[i], ", ")
+                }
+            }
+        }
+    }
+    return(warning_info)
+}
+
 .percent_cell <- function(x) {
     return(length(x[x > 0]))
 }

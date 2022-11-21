@@ -144,8 +144,12 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
         if (length(celltype) != nrow(st_meta)) {
             stop("Length of celltype must be equal to nrow(st_meta)!")
         }
-        celltype <-.rename_chr(celltype)
-        st_meta$celltype <- celltype
+        celltype_new <-.rename_chr(celltype)
+        warning_info <- .show_warning(celltype, celltype_new)
+        if (!is.null(warning_info)) {
+            warning(warning_info)
+        }
+        st_meta$celltype <- celltype_new
         if_skip_dec_celltype <- TRUE
     } else {
         if_skip_dec_celltype <- FALSE
@@ -240,8 +244,12 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         stop("No expressed genes in sc_data!")
     }
     colnames(sc_data) <- .rename_chr(colnames(sc_data))
-    sc_celltype <- .rename_chr(sc_celltype)
-    sc_celltype <- data.frame(cell = colnames(sc_data), celltype = sc_celltype, stringsAsFactors = F)
+    sc_celltype_new <- .rename_chr(sc_celltype)
+    warning_info <- .show_warning(sc_celltype, sc_celltype_new)
+    if (!is.null(warning_info)) {
+        warning(warning_info)
+    }
+    sc_celltype <- data.frame(cell = colnames(sc_data), celltype = sc_celltype_new, stringsAsFactors = F)
     object@data$rawndata <- st_data
     if (if_use_normalize_data == T) {
         st_ndata <- .normalize_data(st_data)
