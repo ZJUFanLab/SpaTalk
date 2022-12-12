@@ -911,6 +911,7 @@
             ndata_dest <- st_data[ggi_res_temp1$dest, cell_receiver]
             ndata_gg <- cbind(ndata_src, ndata_dest)
             # calculate co-expression
+            ggi_res_temp1$co_ratio <- NA
             ggi_res_temp1$co_ratio <- apply(ndata_gg, 1, .co_exp)
             res <- rbind(res, ggi_res_temp1)
             i <- i + 1
@@ -948,6 +949,7 @@
         ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
         ndata_gg <- cbind(ndata_src, ndata_dest)
         # calculate co-expression
+        ggi_res$co_ratio <- NA
         ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
     }
     ggi_res <- ggi_res[ggi_res$co_ratio > co_exp_ratio, ]
@@ -976,6 +978,7 @@
         ndata_dest <- st_data[ggi_res_temp1$dest, cell_receiver]
         ndata_gg <- cbind(ndata_src, ndata_dest)
         # calculate co-expression
+        ggi_res_temp1$co_ratio <- NA
         ggi_res_temp1$co_ratio <- apply(ndata_gg, 1, .co_exp)
         res <- rbind(res, ggi_res_temp1)
         i <- i + 1
@@ -1101,6 +1104,7 @@
             ndata_dest <- st_data[ggi_res_temp1$dest, cell_receiver]
             ndata_gg <- cbind(ndata_src, ndata_dest)
             # calculate co-expression
+            ggi_res_temp1$co_ratio <- NA
             ggi_res_temp1$co_ratio <- apply(ndata_gg, 1, .co_exp)
             res <- rbind(res, ggi_res_temp1)
             i <- i + 1
@@ -1139,6 +1143,7 @@
             ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
             ndata_gg <- cbind(ndata_src, ndata_dest)
             # calculate co-expression
+            ggi_res$co_ratio <- NA
             ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
         }
         ggi_res <- ggi_res[ggi_res$co_ratio > co_exp_ratio, ]
