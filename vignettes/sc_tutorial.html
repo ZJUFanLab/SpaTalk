@@ -154,7 +154,7 @@ a.sourceLine {
 </div>
 <div id="cell-type-decomposition" class="section level2">
 <h2><strong>Cell-type decomposition</strong></h2>
-<p>First, we apply <a href="https://github.com/linxihui/NNLM">NNLM</a> and spatial mapping to reconstruct the ST data at single-cell resolution using <code>dec_celltype()</code></p>
+<p>First, we apply <a href="https://github.com/linxihui/NNLM">NNLM</a> and spatial mapping to reconstruct the ST data at single-cell resolution using <code>dec_celltype()</code>. For single-cell ST data with known cell types, you can directly infer cell cell communication skiping deconvolution. Please refer to the <a href="https://github.com/ZJUFanLab/SpaTalk/wiki/Directly-infer-cell-cell-communication-skiping-deconvolution">tutorial</a></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># decode the cell-type composition</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">dec_celltype</span>(<span class="at">object =</span> obj,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sc_data =</span> <span class="fu">as.matrix</span>(starmap_data),</span>
