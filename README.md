@@ -26,23 +26,26 @@ devtools::install_local("/path/to/miRTalk-main.zip")
 ```
 
 # Usage
-SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__
+SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__ and __[tutorial](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html)__
+
 - ### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
 ```
-# object: SpaTalk object containg ST data
+# st_data: A matrix containing counts of st data
+# st_meta: A data.frame containing x and y
 # sc_data: A matrix containing counts of scRNA-seq data as the reference
 # sc_celltype:  A character containing the cell types for scRNA-seq data
 
-dec_celltype(object, sc_data, sc_celltype)
+obj <- createSpaTalk(st_data, st_meta, species)
+obj <- dec_celltype(obj, sc_data, sc_celltype)
 ```
 
 - ### Inference of cell-cell communication and ligand-receptor-target network in space
 ```
-# object: SpaTalk object containg ST and scRNA-seq data
+# obj: SpaTalk object containg ST and scRNA-seq data
 # celltype_sender
 # celltype_receiver
 
-dec_cci(object, celltype_sender, celltype_receiver)
+dec_cci(obj, celltype_sender, celltype_receiver)
 ```
 
 OR
