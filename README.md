@@ -45,13 +45,13 @@ obj <- dec_celltype(obj, sc_data, sc_celltype)
 # celltype_sender
 # celltype_receiver
 
-dec_cci(obj, celltype_sender, celltype_receiver)
+obj <- dec_cci(obj, celltype_sender, celltype_receiver)
 ```
 
 OR
 
 ```
-dec_cci_all(object)
+obj <- dec_cci_all(object)
 ```
 
 # Note
