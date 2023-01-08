@@ -79,3 +79,5 @@ __Please refer to the [tutorial vignette](https://raw.githack.com/ZJUFanLab/SpaT
 
 # About
 SpaTalk was developed by Xin Shao. Should you have any questions, please contact Xin Shao at xin_shao@zju.edu.cn
+
+Please cite us as "Shao, X., Li, C., Yang, H. et al. Knowledge-graph-based cell-cell communication inference for spatially resolved transcriptomic data with SpaTalk. Nat Commun 13, 4429 (2022). https://doi.org/10.1038/s41467-022-32111-8"
