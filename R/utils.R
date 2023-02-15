@@ -1288,3 +1288,24 @@
     tf_path_new$tf <- tf_gene
     return(tf_path_new)
 }
+
+#' @title Show SpaTalk object
+#'
+#' @return SpaTalk object
+#' @import Matrix
+#' @importFrom methods show
+#'
+#' @export
+
+setMethod(
+    f = 'show',
+    signature = 'SpaTalk',
+    definition = function(object) {
+        cat("An object of class SpaTalk", "\n")
+        st_data <- obj@data$rawdata
+        st_type <- obj@para[["st_type"]]
+        lrpair <- obj@lrpair
+        cat(paste0(nrow(st_data), " genes across ", ncol(st_data), " ", st_type, "s (", nrow(lrpair), " lrpair)"), "\n")
+        return(invisible(x = NULL))
+    }
+)
