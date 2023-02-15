@@ -59,7 +59,7 @@ obj <- dec_cci_all(object)
 
 SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://tcm.zju.edu.cn/celltalkdb/), pathways from [`KEGG`](https://www.kegg.jp/kegg/pathway.html) and [`Reactome`](https://reactome.org/), and transcrptional factors (TFs) from [`AnimalTFDB`](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) by default. In the current version:
 
-- __SpaTalk can be applied to either [single-cell (vignette)](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/sc_tutorial.html) or [spot-based (vignette)](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/spot_tutorial.html) ST data__
+- __SpaTalk can be applied to either [single-cell (vignette)](https://raw.githack.com/shaoxin0801/Cell-cell-communication/main/vignettes/sc_tutorial.html) or [spot-based (vignette)](https://raw.githack.com/shaoxin0801/Cell-cell-communication/main/vignettes/spot_tutorial.html) ST data__
 - __SpaTalk allows to use custom [LRIs(wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-lrpairs), [pathways, and TFs database (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-pathways)__
 - __SpaTalk allows to use the parallel processing for `dec_celltype()`, `dec_cci()`, and `dec_cci_all()`__
 - __SpaTalk allows to [use other deconvolution methods](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-other-deconvolution-methods) followed by the inference of cell-cell communications__
