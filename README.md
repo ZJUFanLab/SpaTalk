@@ -12,17 +12,17 @@
 - install dependent packages `devtools` and [`NNLM`](https://github.com/linxihui/NNLM)
 
 ```
-install.packages(pkgs = 'devtools')
-devtools::install_github('linxihui/NNLM')
+> install.packages(pkgs = 'devtools')
+> devtools::install_github('linxihui/NNLM')
 ```
 
 - then install SpaTalk
 
 ```
-devtools::install_github('ZJUFanLab/SpaTalk')
+> devtools::install_github('ZJUFanLab/SpaTalk')
 
 # or download the repository as ZIP
-devtools::install_local("/path/to/miRTalk-main.zip")
+> devtools::install_local("/path/to/miRTalk-main.zip")
 ```
 
 # Usage
@@ -35,8 +35,13 @@ SpaTalk method consists of two components, wherein the first is to dissect the c
 # sc_data: A matrix containing counts of scRNA-seq data as the reference
 # sc_celltype:  A character containing the cell types for scRNA-seq data
 
-obj <- createSpaTalk(st_data, st_meta, species)
-obj <- dec_celltype(obj, sc_data, sc_celltype)
+> obj <- createSpaTalk(st_data, st_meta, species)
+> 
+> obj
+An object of class SpaTalk 
+996 genes across 509 spots (0 lrpair)
+> 
+> obj <- dec_celltype(obj, sc_data, sc_celltype)
 ```
 
 - ### Inference of cell-cell communication and ligand-receptor-target network in space
@@ -45,13 +50,13 @@ obj <- dec_celltype(obj, sc_data, sc_celltype)
 # celltype_sender
 # celltype_receiver
 
-obj <- dec_cci(obj, celltype_sender, celltype_receiver)
+> obj <- dec_cci(obj, celltype_sender, celltype_receiver)
 ```
 
 OR
 
 ```
-obj <- dec_cci_all(object)
+> obj <- dec_cci_all(object)
 ```
 
 # Note
