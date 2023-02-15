@@ -26,7 +26,7 @@
 ```
 
 # Usage
-SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__ and __[tutorial](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/tutorial.html)__
+SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__ and __[tutorial](https://raw.githack.com/shaoxin0801/Cell-cell-communication/main/method/tutorial.html)__
 
 - ### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
 ```
