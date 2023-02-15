@@ -144,7 +144,7 @@ createSpaTalk <- function(st_data, st_meta, species, if_st_is_sc, spot_max_cell,
         if (length(celltype) != nrow(st_meta)) {
             stop("Length of celltype must be equal to nrow(st_meta)!")
         }
-        celltype_new <-.rename_chr(celltype)
+        celltype_new <- .rename_chr(celltype)
         warning_info <- .show_warning(celltype, celltype_new)
         if (!is.null(warning_info)) {
             warning(warning_info)
@@ -337,12 +337,15 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
             stop("Please provide a correct dec_result matrix! See demo_dec_result()!")
         }
         dec_colname <- colnames(dec_result)
-        dec_colname <- stringr::str_replace_all(dec_colname, pattern = "-", replacement = "_")
+        dec_colname <- .rename_chr(dec_colname)
+        colnames(dec_result) <- dec_colname
         if (!all(dec_colname %in% unique(sc_celltype$celltype))) {
             stop("Celltype name in dec_result must be consistent with the names in scRNA-seq reference!")
         }
         dec_rowname <- rownames(dec_result)
-        if (!all(st_meta[,1] == dec_rowname)) {
+        dec_rowname <- .rename_chr(dec_rowname)
+        rownames(dec_result) <- dec_rowname
+        if (!all(colnames(st_data) == dec_rowname)) {
             stop("Spot/cell name in dec_result must be consistent with the names in st_meta!")
         }
         st_coef <- dec_result
