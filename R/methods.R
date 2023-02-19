@@ -445,7 +445,7 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL, if_doParalle
     }
     if (is.null(use_n_cores)) {
         n_cores <- parallel::detectCores()
-        n_cores <- n_cores-2
+        n_cores <- floor(n_cores/2)
     } else {
         n_cores <- use_n_cores
     }
