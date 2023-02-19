@@ -640,6 +640,7 @@
             data.frame(spot = "NA", cell_ratio = "NA", celltype = "NA", x = "NA", y = "NA", stringsAsFactors = F)
         }
     }
+    newmeta <- newmeta[newmeta$spot != "NA",]
     return(newmeta)
 }
 
