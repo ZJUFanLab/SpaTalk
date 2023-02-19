@@ -80,8 +80,7 @@ __Please refer to the [tutorial vignette](https://raw.githack.com/shaoxin0801/Ce
 - Fix the bug in `dec_celltype()` when using other deconvolution methods, [see issue 11](https://github.com/ZJUFanLab/SpaTalk/issues/11)
 - Fix the bug in `dec_celltype()` when using `dec_result`, [see issue 30](https://github.com/ZJUFanLab/SpaTalk/issues/30)
 - Fix the bug in `dec_cci()` and `dec_cci_all()`, [see issue 10](https://github.com/ZJUFanLab/SpaTalk/issues/10)
-- Fix the bug in performing parallel functions
-- `invalid character indexing` see [issue 10](https://github.com/ZJUFanLab/SpaTalk/issues/10) and [issue 30](https://github.com/ZJUFanLab/SpaTalk/issues/30)
+- Fix the bug in performing parallel functions, e.g., `invalid character indexing` see [issue 10](https://github.com/ZJUFanLab/SpaTalk/issues/30) and [issue 30](https://github.com/ZJUFanLab/SpaTalk/issues/10)
 - __Allow to retain genes consistent with reference `sc_data` for reconstructed single-cell ST data [(wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Retain-all-genes-in-the-reference)__
 
 # About
