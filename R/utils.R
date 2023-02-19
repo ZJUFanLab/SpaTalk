@@ -1069,7 +1069,12 @@
                 # random walk
                 receptor_tf_temp$score <- .random_walk(receptor_tf_temp, ggi_res)
                 receptor_tf_temp
+            } else {
+                data.frame()
             }
+        }
+        else {
+            data.frame()
         }
     }
     return(receptor_tf)
