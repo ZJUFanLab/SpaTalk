@@ -200,12 +200,12 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     if (if_doParallel) {
         if (is.null(use_n_cores)) {
             n_cores <- parallel::detectCores()
-            n_cores <- floor(n_cores/2)
+            n_cores <- floor(n_cores/4)
         } else {
             n_cores <- use_n_cores
         }
         n.threads <- n_cores
-        if (n_cores == 1) {
+        if (n_cores < 2) {
             if_doParallel <- F
             n.threads <- 0
         }
@@ -445,7 +445,10 @@ find_lr_path <- function(object, lrpairs, pathways, max_hop = NULL, if_doParalle
     }
     if (is.null(use_n_cores)) {
         n_cores <- parallel::detectCores()
-        n_cores <- floor(n_cores/2)
+        n_cores <- floor(n_cores/4)
+        if (n_cores < 2) {
+            if_doParallel <- FALSE
+        }
     } else {
         n_cores <- use_n_cores
     }
@@ -582,7 +585,10 @@ dec_cci <- function(object, celltype_sender, celltype_receiver, n_neighbor = 10,
     }
     if (is.null(use_n_cores)) {
         n_cores <- parallel::detectCores()
-        n_cores <- n_cores-2
+        n_cores <- floor(n_cores/4)
+        if (n_cores < 2) {
+            if_doParallel <- FALSE
+        }
     } else {
         n_cores <- use_n_cores
     }
@@ -688,7 +694,10 @@ dec_cci_all <- function(object, n_neighbor = 10, min_pairs = 5, min_pairs_ratio 
     }
     if (is.null(use_n_cores)) {
         n_cores <- parallel::detectCores()
-        n_cores <- n_cores-2
+        n_cores <- floor(n_cores/4)
+        if (n_cores < 2) {
+            if_doParallel <- FALSE
+        }
     } else {
         n_cores <- use_n_cores
     }
