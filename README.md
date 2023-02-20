@@ -47,8 +47,12 @@ An object of class SpaTalk
 - ### Inference of cell-cell communication and ligand-receptor-target network in space
 ```
 # obj: SpaTalk object containg ST and scRNA-seq data
+# lrpairs: A data.frame of the system data containing ligand-receptor pairs
+# pathways: A data.frame of the system data containing gene-gene interactions and pathways
 # celltype_sender
 # celltype_receiver
+
+> obj <- find_lr_path(object = obj, lrpairs = lrpairs, pathways = pathways)
 
 > obj <- dec_cci(obj, celltype_sender, celltype_receiver)
 ```
