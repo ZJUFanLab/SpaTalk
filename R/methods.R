@@ -371,22 +371,26 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         } else {
             newmeta <- .generate_newmeta(st_meta, st_dist, min_percent)
         }
-        newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, n_cores, if_doParallel)
-        if (if_retain_other_genes) {
-            sc_ndata <- sc_ndata_raw
-        } else {
-            if (if_use_hvg) {
+        if (nrow(newmeta) > 0) {
+            newmeta_cell <- .generate_newmeta_cell(newmeta, st_ndata, sc_ndata, sc_celltype, iter_num, n_cores, if_doParallel)
+            if (if_retain_other_genes) {
                 sc_ndata <- sc_ndata_raw
-                sc_ndata <- sc_ndata[genename, ]
+            } else {
+                if (if_use_hvg) {
+                    sc_ndata <- sc_ndata_raw
+                    sc_ndata <- sc_ndata[genename, ]
+                }
             }
+            newdata <- sc_ndata[, newmeta_cell$cell_id]
+            colnames(newdata) <- newmeta_cell$cell
+            object@data$newdata <- methods::as(newdata, Class = "dgCMatrix")
+            object@meta$newmeta <- newmeta_cell
+            st_meta[st_meta$spot %in% newmeta_cell$spot, ]$celltype <- "sure"
+            st_dist <- .st_dist(newmeta_cell)
+            object@meta$rawmeta <- st_meta
+        } else {
+            warning("No new data are generated for the min_percent!")
         }
-        newdata <- sc_ndata[, newmeta_cell$cell_id]
-        colnames(newdata) <- newmeta_cell$cell
-        object@data$newdata <- methods::as(newdata, Class = "dgCMatrix")
-        object@meta$newmeta <- newmeta_cell
-        st_meta[st_meta$spot %in% newmeta_cell$spot, ]$celltype <- "sure"
-        st_dist <- .st_dist(newmeta_cell)
-        object@meta$rawmeta <- st_meta
     }
     cat(crayon::green("***Done***", "\n"))
     object@dist <- st_dist
