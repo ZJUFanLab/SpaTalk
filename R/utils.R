@@ -138,7 +138,7 @@
     spotlight_ls <- SPOTlight::spotlight_deconvolution(se_sc = ref_data, counts_spatial = as.matrix(st_data), clust_vr = "celltype", cluster_markers = cluster_markers_all)
     spotlight_ls<- as.data.frame(spotlight_ls[[2]])
     spotlight_ls<- spotlight_ls[,-ncol(spotlight_ls)]
-    st_coef <- as.matrix(st_coef)
+    st_coef <- as.matrix(spotlight_ls)
     return(st_coef)
 }
 

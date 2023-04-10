@@ -355,6 +355,8 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
     st_coef <- st_coef[ ,coef_name]
     object@coef <- st_coef
     st_meta <- cbind(st_meta, .coef_nor(st_coef))
+    st_ndata <- object@data$rawndata
+    sc_ndata <- sc_ndata_raw
     st_ndata <- st_ndata[genename, ]
     sc_ndata <- sc_ndata[genename, ]
     if (st_type == "single-cell") {
