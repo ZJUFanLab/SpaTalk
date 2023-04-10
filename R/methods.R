@@ -228,7 +228,7 @@ dec_celltype <- function(object, sc_data, sc_celltype, min_percent = 0.5, min_nF
         sc_data <- methods::as(sc_data, "dgCMatrix")
     }
     if (!is(sc_data, "dgCMatrix")) {
-        stop("st_data must be a data.frame or matrix or dgCMatrix!")
+        stop("sc_data must be a data.frame or matrix or dgCMatrix!")
     }
     if (!is.character(sc_celltype)) {
         stop("sc_celltype is not a character!")
