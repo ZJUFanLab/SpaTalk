@@ -1,5 +1,5 @@
 # SpaTalk
-[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6809147.svg)](https://doi.org/10.5281/zenodo.6809147) [![jupyter](https://img.shields.io/badge/Jupyter--notebook-SpaTalk--tutorial-yellow?logo=jupyter)](https://github.com/shaoxin0801/awesome-cell-cell-communication/blob/main/method/SpaTalk.ipynb) [![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41467--022--32111--8-yellowgreen)](https://www.nature.com/articles/s41467-022-32111-8)
+[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6809147.svg)](https://doi.org/10.5281/zenodo.6809147) [![jupyter](https://img.shields.io/badge/Jupyter--notebook-SpaTalk--tutorial-yellow?logo=jupyter)](https://github.com/multitalk/awesome-cell-cell-communication/blob/main/method/SpaTalk.ipynb) [![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41467--022--32111--8-yellowgreen)](https://www.nature.com/articles/s41467-022-32111-8)
 
 ### A cell-cell communication inference approach for spatially resolved transcriptomic data
 
@@ -26,7 +26,7 @@
 ```
 
 # Usage
-SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__ and __[tutorial](https://raw.githack.com/shaoxin0801/Cell-cell-communication/main/method/tutorial.html)__
+SpaTalk method consists of two components, wherein the first is to dissect the cell-type composition of ST data and the second is to infer the spatially resolved cell-cell communications over the decomposed single-cell ST data. Classification and description of SpaTalk functions are shown in the __[wiki page](https://github.com/ZJUFanLab/SpaTalk/wiki)__ and __[tutorial](https://raw.githack.com/multitalk/awesome-cell-cell-communication/main/method/tutorial.html)__
 
 - ### Cell-type decomposition to reconstruct single-cell ST atlas with known cell types
 ```
@@ -68,7 +68,7 @@ OR
 
 SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://tcm.zju.edu.cn/celltalkdb/), pathways from [`KEGG`](https://www.kegg.jp/kegg/pathway.html) and [`Reactome`](https://reactome.org/), and transcrptional factors (TFs) from [`AnimalTFDB`](http://bioinfo.life.hust.edu.cn/AnimalTFDB/#!/) by default. In the current version:
 
-- __SpaTalk can be applied to either [single-cell (vignette)](https://raw.githack.com/shaoxin0801/awesome-cell-cell-communication/main/method/sc_tutorial.html) or [spot-based (vignette)](https://raw.githack.com/shaoxin0801/awesome-cell-cell-communication/main/method/spot_tutorial.html) ST data__
+- __SpaTalk can be applied to either [single-cell (vignette)](https://raw.githack.com/multitalk/awesome-cell-cell-communication/main/method/sc_tutorial.html) or [spot-based (vignette)](https://raw.githack.com/multitalk/awesome-cell-cell-communication/main/method/spot_tutorial.html) ST data__
 - __SpaTalk allows to use custom [LRIs(wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-lrpairs), [pathways, and TFs database (wiki)](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-customed-pathways)__
 - __SpaTalk allows to use the parallel processing for `dec_celltype()`, `dec_cci()`, and `dec_cci_all()`__
 - __SpaTalk allows to [use other deconvolution methods](https://github.com/ZJUFanLab/SpaTalk/wiki/Use-other-deconvolution-methods) followed by the inference of cell-cell communications__
@@ -78,7 +78,7 @@ SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://
 - LRIs and pathways can be download at[`data/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/data) 
 - Demo data can be download at[`inst/extdata/`](https://github.com/ZJUFanLab/SpaTalk/tree/main/inst/extdata)
 
-__Please refer to the [tutorial vignette](https://raw.githack.com/shaoxin0801/awesome-cell-cell-communication/main/method/tutorial.html) with demo data processing steps. Detailed functions see the [document](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/SpaTalk.pdf)__
+__Please refer to the [tutorial vignette](https://raw.githack.com/multitalk/awesome-cell-cell-communication/main/method/tutorial.html) with demo data processing steps. Detailed functions see the [document](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/SpaTalk.pdf)__
 
 ### News
 - Fix the bug in `dec_celltype()` when using other deconvolution methods, [see issue 11](https://github.com/ZJUFanLab/SpaTalk/issues/11)
