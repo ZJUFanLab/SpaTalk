@@ -22,7 +22,7 @@
 > devtools::install_github('ZJUFanLab/SpaTalk')
 
 # or download the repository as ZIP
-> devtools::install_local("/path/to/miRTalk-main.zip")
+> devtools::install_local("/path/to/SpaTalk-main.zip")
 ```
 
 # Usage
