@@ -81,6 +81,7 @@ SpaTalk uses the ligand-receptor interactions (LRIs) from [`CellTalkDB`](http://
 __Please refer to the [tutorial vignette](https://raw.githack.com/multitalk/awesome-cell-cell-communication/main/method/tutorial.html) with demo data processing steps. Detailed functions see the [document](https://raw.githack.com/ZJUFanLab/SpaTalk/main/vignettes/SpaTalk.pdf)__
 
 ### News
+- Compatible with Seurat 5. [see issue 40](https://github.com/ZJUFanLab/SpaTalk/issues/40)
 - Fix the bug in `dec_celltype()` when using other deconvolution methods, [see issue 11](https://github.com/ZJUFanLab/SpaTalk/issues/11)
 - Fix the bug in `dec_celltype()` when using `dec_result`, [see issue 30](https://github.com/ZJUFanLab/SpaTalk/issues/30)
 - Fix the bug in `dec_cci()` and `dec_cci_all()`, [see issue 10](https://github.com/ZJUFanLab/SpaTalk/issues/10)
