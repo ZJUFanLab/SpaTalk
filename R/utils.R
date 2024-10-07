@@ -289,11 +289,7 @@
     ver <- packageVersion("Seurat")
     ver <- substr(ver,1,1)
     if (ver >= 5) {
-        genenames <- rownames(rawdata)
-        cellnames <- colnames(rawdata)
-        rawdata <- rawdata[["RNA"]]@layers$data
-        rownames(rawdata) <- genenames
-        colnames(rawdata) <- cellnames
+        rawdata <- rawdata@assays$RNA$data
     } else {
         rawdata <- rawdata[["RNA"]]@data
     }
