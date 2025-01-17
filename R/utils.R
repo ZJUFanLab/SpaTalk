@@ -952,12 +952,21 @@
     if (nrow(ggi_res_temp) >= 5000) {
         ggi_res <- .co_exp_batch(st_data, ggi_res, cell_pair)
     } else {
-        ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
-        ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
-        ndata_gg <- cbind(ndata_src, ndata_dest)
-        # calculate co-expression
-        ggi_res$co_ratio <- NA
-        ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
+        if (nrow(ggi_res) == 1) {
+            ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
+            ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
+            ndata_gg <- c(ndata_src, ndata_dest)
+            # calculate co-expression
+            ggi_res$co_ratio <- NA
+            ggi_res$co_ratio <- .co_exp(ndata_gg)
+        } else {
+            ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
+            ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
+            ndata_gg <- cbind(ndata_src, ndata_dest)
+            # calculate co-expression
+            ggi_res$co_ratio <- NA
+            ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
+        }
     }
     ggi_res <- ggi_res[ggi_res$co_ratio > co_exp_ratio, ]
     return(ggi_res)
@@ -1151,12 +1160,21 @@
         if (nrow(ggi_res_temp) >= 5000) {
             ggi_res <- .co_exp_batch(st_data, ggi_res, cell_pair)
         } else {
-            ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
-            ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
-            ndata_gg <- cbind(ndata_src, ndata_dest)
-            # calculate co-expression
-            ggi_res$co_ratio <- NA
-            ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
+            if (nrow(ggi_res) == 1) {
+                ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
+                ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
+                ndata_gg <- c(ndata_src, ndata_dest)
+                # calculate co-expression
+                ggi_res$co_ratio <- NA
+                ggi_res$co_ratio <- .co_exp(ndata_gg)
+            } else {
+                ndata_src <- st_data[ggi_res$src, cell_pair$cell_receiver]
+                ndata_dest <- st_data[ggi_res$dest, cell_pair$cell_receiver]
+                ndata_gg <- cbind(ndata_src, ndata_dest)
+                # calculate co-expression
+                ggi_res$co_ratio <- NA
+                ggi_res$co_ratio <- apply(ndata_gg, 1, .co_exp)
+            }
         }
         ggi_res <- ggi_res[ggi_res$co_ratio > co_exp_ratio, ]
         return(ggi_res)
